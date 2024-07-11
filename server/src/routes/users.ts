@@ -1,6 +1,5 @@
 import express from "express";
 import * as UserController from "../controllers/users";
-import { auhteticateUser } from "../utils/auth";
 
 const router = express.Router();
 

@@ -1,0 +1,24 @@
+@import url('../../index.css');
+
+.container{
+    display: grid;
+    padding: 1rem;
+    grid-template-columns: 25% 75%;
+}
+
+.sideBar{
+    display: flex;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+}
+
+/* CSS for small screens */
+@media (max-width: 768px) {
+  .sideBar {
+    display: none;
+    background-color: transparent;
+  }
+}

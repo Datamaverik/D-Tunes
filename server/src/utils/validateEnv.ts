@@ -9,4 +9,9 @@ export default cleanEnv(process.env, {
   PORT: port(),
   JWT_SECRET: str(),
   FRONT_END_URL: str(),
+  SPOTIFY_CLIENT_ID: str(),
+  SPOTIFY_CLIENT_SECRET: str(),
+  SPOTIFY_BASE_URL: str(),
+  SPOTIFY_TOKEN_ENDPOINT: str(),
+  TOKEN_ID: str(),
 });

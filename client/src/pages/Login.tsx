@@ -29,42 +29,46 @@ const Login = ({ onSuccessfulLogin }: LoginPageProps) => {
   }
 
   return (
-    <div className={styles.formCont}>
-      <form
-        action="post"
-        className={styles.formGroup}
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <TextInputField
-          name="username"
-          label="Username"
-          type="text"
-          placeholder="Username"
-          register={register}
-          registerOptions={{
-            required: "required",
-            minLength: 3,
-            maxLength: 255,
-          }}
-          error={errors.username as FieldError}
-        />
-        <TextInputField
-          name="password"
-          label="Password"
-          type="password"
-          placeholder="Password"
-          register={register}
-          registerOptions={{
-            required: "required",
-            minLength: 3,
-            maxLength: 255,
-          }}
-          error={errors.password as FieldError}
-        />
-        <button type="submit" className={styles.signUpBtn}>
-          Log In
-        </button>
-      </form>
+    <div className={styles.loginCont}>
+      <div className={styles.banner}>
+      </div>
+      <div className={styles.formCont}>
+        <form
+          action="post"
+          className={styles.formGroup}
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <TextInputField
+            name="username"
+            label="Username"
+            type="text"
+            placeholder="Username"
+            register={register}
+            registerOptions={{
+              required: "required",
+              minLength: 3,
+              maxLength: 255,
+            }}
+            error={errors.username as FieldError}
+          />
+          <TextInputField
+            name="password"
+            label="Password"
+            type="password"
+            placeholder="Password"
+            register={register}
+            registerOptions={{
+              required: "required",
+              minLength: 3,
+              maxLength: 255,
+            }}
+            error={errors.password as FieldError}
+          />
+          <button type="submit" className={styles.signUpBtn}>
+            Log In
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import { getLoggedInUser } from "./network/api";
 import { AxiosError } from "axios";
 import Profile from "./pages/Profile";
+import Sidebar from "./components/Sidebar";
+import SerachBar from "./components/SerachBar";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
@@ -25,7 +27,6 @@ function App() {
       } catch (er) {
         if (er instanceof AxiosError) alert(er.response?.data.message);
         console.log(er);
-        
       }
     };
     fetchLoggedInUser();
@@ -59,12 +60,25 @@ function App() {
         }
         homeLink={
           <NavLink to={"/"}>
-            <img className={styles.logos} src="../icons8-home.svg" alt="" id="home-logo" />
+            <img
+              className={styles.logos}
+              src="../icons8-home.svg"
+              alt=""
+              id="home-logo"
+            />
           </NavLink>
         }
       />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <Home
+              sideBar={<Sidebar />}
+              serchBar={<SerachBar />}
+            />
+          }
+        />
         <Route
           path="signup"
           element={<SignUp onSuccessfulSignUp={handleSignup} />}
@@ -73,10 +87,7 @@ function App() {
           path="login"
           element={<Login onSuccessfulLogin={handleLogin} />}
         />
-        <Route
-          path="profile"
-          element={<Profile />}
-        />
+        <Route path="profile" element={<Profile />} />
         <Route path="*" element={<NotFoundPg />} />
       </Routes>
     </>

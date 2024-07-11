@@ -31,7 +31,7 @@ const Navbar = ({
         <div className={styles.hamburger}>
           <button className={styles.toggleButton} onClick={handleToggleClick}>
             {/* {add svg of hamburger here} */}
-            <img src="../public/hamburgerMenu.svg" alt="" />
+            <img src="./hamburgerMenu.svg" alt="" />
           </button>
           <div
             className={`${styles.collapse} ${!isCollapsed ? styles.show : ""}`}

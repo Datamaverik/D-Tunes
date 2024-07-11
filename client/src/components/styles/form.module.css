@@ -9,14 +9,14 @@
   font-size: 1rem;
   line-height: 1.5;
   color: var(--background-color);
-  background-color: var(--foregound-pos);
+  background-color: var(--foreground-color);
   background-clip: padding-box;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--foregound-pos);
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 ::placeholder{
-  color: var(--foreground-color);
+  color: var(--background-color);
 }
 .inputArea:focus {
   border-color: #80bdff;
@@ -41,7 +41,7 @@
   color: #dc3545;
 }
 .formGroup{
-  margin: 2rem;
+  margin: 0.5rem;
   border-radius: 10px;
   box-shadow: 0px 0px 5px black;
   padding: 1rem;
@@ -49,7 +49,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: var(--foreground-color);
+  background-color: var(--foregound-neg);
 }
 .textGroup{
   margin: 5px;
@@ -61,4 +61,34 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+.banner{
+  background-image: url('./login-banner.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 45vh;
+  min-width: 50vw;
+  border-radius: 10px;
+}
+.loginCont{
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .loginCont{
+    display: flex;
+    flex-direction: row;
+  }
+  .banner{
+    min-height: 80vh;
+    min-width: 40vw;
+  }
+  .formGroup{
+    margin: 2rem;
+  }
 }
