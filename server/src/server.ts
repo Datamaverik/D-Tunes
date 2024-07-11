@@ -11,6 +11,7 @@ mongoose
     console.log("Mongoose connected");
     app.listen(port, () => {
       console.log("Server running on port: " + port);
+      console.log(env.FRONT_END_URL);
     });
   })
   .catch((err) => {

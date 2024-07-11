@@ -1,0 +1,113 @@
+@import url("../../index.css");
+
+.navbar {
+  background-color: var(--header);
+  color: white;
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  width: aut;
+  z-index: 1000;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.logo {
+  height: 40px;
+  margin-right: 1rem;
+}
+
+.toggleButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+  width: 45px;
+  height: 25px;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+}
+.toggleButton:hover{
+  background-color: transparent;
+}
+.toggleButton img:hover{
+   cursor: pointer;
+  filter: drop-shadow(0px 0px 4px white);
+}
+
+.toggleIcon {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+}
+
+.collapse {
+  display: none;
+}
+
+.collapse.show {
+  display: flex;
+}
+
+.nav {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.navItem {
+  cursor: pointer;
+}
+
+.links {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0px;
+  margin: 0px;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.icons {
+  fill: white;
+}
+
+.logos:hover{
+  filter: drop-shadow(0px 0px 2px white);
+}
+
+@media (min-width: 768px) {
+  .toggleButton {
+    display: none;
+  }
+
+  .collapse {
+    display: flex !important;
+  }
+
+  .nav {
+    gap: 2rem;
+  }
+}

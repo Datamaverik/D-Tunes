@@ -2,12 +2,18 @@ import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import UserRoutes from "./routes/users";
-import cookieParser from 'cookie-parser';
+import cookieParser from "cookie-parser";
 import createHttpError, { isHttpError } from "http-errors";
+import env from "./utils/validateEnv";
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: env.FRONT_END_URL,
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 app.use(express.json());
 app.use(morgan("dev"));
@@ -19,7 +25,7 @@ app.use((req, res, next) => {
   next(createHttpError(404, "Endpoint not found"));
 });
 
- //  To catch unknown/ internal sever errors
+//  To catch unknown/ internal sever errors
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
   console.error(error);
   let errorMessage = "An error occurred";

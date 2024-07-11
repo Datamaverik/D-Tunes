@@ -9,8 +9,9 @@ const generateToken = (userId: mongoose.Types.ObjectId): string => {
 const sendCookie = (id: mongoose.Types.ObjectId, res: Response): void => {
   const token = generateToken(id);
   res.cookie("token", token, {
-    httpOnly: true,
     maxAge: 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: "lax",
   });
 };
 

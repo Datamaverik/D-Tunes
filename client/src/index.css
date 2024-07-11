@@ -1,22 +1,68 @@
+@font-face {
+  font-family: Orbitron;
+  src: url("../public/Orbitron-Regular.27ed04af.ttf");
+}
+@font-face {
+  font-family: Nunito;
+  src: url("../public/Nunito-Regular.53a5ca69.ttf");
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --background-color: #06141B;
+  --foreground-color: #4A5C6A;
+  --foregound-neg: #253745;
+  --foregound-pos: #9BA8AB;
+  --header: #11212D;
+  --text-color: #CCD0CF;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--background-color);
+  background: linear-gradient(to top, var(--background-color),var(--foregound-neg));
+  color: var(--text-color);
+  font-family: Nunito;
+  font-size: 1.2rem;
+}
+
+button {
+  font-family: Orbitron;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: var(--foregound-pos);
+  color: var(--background-color);
+  font-size: large;
+  font-weight: bolder;
+  transition: all 0.25s ease;
+}
+
+button:hover {
+  cursor: pointer;
+  color: var(--text-color);
+  background-color: var(--header);
+  text-shadow: 0px 0px 2px white;
+}
+
+a {
+  color: var(--foregound-pos);
+  text-decoration: none;
+  font-size: large;
+}
+
+a:hover {
+  cursor: pointer;
+  text-shadow: 0px 0px 3px white;
+  color: var(--text-color);
+}
+
+p {
+  color: var(--text-color);
+  font-size: large;
+  font-weight: bold;
+  text-shadow: 0px 0px 2px black;
+  padding: 0px;
+  margin: 3px;
 }
