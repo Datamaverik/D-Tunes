@@ -1,0 +1,88 @@
+@import url("../../index.css");
+@font-face {
+  font-family: Orbitron;
+  src: url("./Orbitron-Regular.27ed04af.ttf");
+}
+@font-face {
+  font-family: Nunito;
+  src: url("./Nunito-Regular.53a5ca69.ttf");
+}
+.genreName {
+  font-size: 1rem;
+  text-shadow: 0px 0px 3px black;
+  text-align: center;
+  font-family: Nunito;
+}
+.imageCont {
+  min-height: 30vh;
+  min-width: 25%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  font-family: Nunito;
+}
+.genreCardCont {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.playlistView {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 10vh;
+}
+.songCont {
+  display: flex;
+}
+.songImgCont {
+  width: 10%;
+  min-height: 10vh;
+  height: auto;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 1rem;
+}
+.songName {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.songName img {
+  min-width: 20px;
+  min-height: 20px;
+}
+.trackPlayer {
+  margin: 0px;
+  position: fixed;
+  width: 100%;
+  bottom: 0px;
+}
+.playerCont {
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+  background-color: rgba(1, 15, 31, 0.5);
+  backdrop-filter: blur(5px);
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  .genreCardCont {
+    grid-template-columns: 1fr 1fr;
+  }
+  .imageCont {
+    min-width: 50vw;
+  }
+}

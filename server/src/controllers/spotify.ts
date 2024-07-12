@@ -98,7 +98,7 @@ export const getPlaylistsByGenre = async (
   const accessToken = token?.access_token;
   try {
     const response = await axios.get(
-      `${baseURL}/browse/categories/${genreId}/playlists?limit=10`,
+      `${baseURL}/browse/categories/${genreId}/playlists?limit=15`,
       {
         headers: { Authorization: "Bearer " + accessToken },
       }
@@ -120,7 +120,7 @@ export const getTracksOfPlaylist = async (
   const accessToken = token?.access_token;
   try {
     const response = await axios.get(
-      `${baseURL}/playlists/${playlistId}/tracks?limit=10`,
+      `${baseURL}/playlists/${playlistId}/tracks?limit=15`,
       {
         headers: { Authorization: "Bearer " + accessToken },
       }

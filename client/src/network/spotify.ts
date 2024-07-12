@@ -44,3 +44,12 @@ export const getTrack = async (trackId: string) => {
     console.error(er);
   }
 };
+
+export const getAccessToken = async () => {
+  try {
+    const response = await api.get('/api/songs/access-token');
+    return response.data;
+  } catch (er) {
+    console.error(er);
+  }
+};

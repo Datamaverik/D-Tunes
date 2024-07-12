@@ -1,6 +1,5 @@
 import { NavLink, Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
-import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import NotFoundPg from "./pages/NotFoundPg";
@@ -10,8 +9,10 @@ import { useEffect, useState } from "react";
 import { getLoggedInUser } from "./network/api";
 import { AxiosError } from "axios";
 import Profile from "./pages/Profile";
-import Sidebar from "./components/Sidebar";
-import SerachBar from "./components/SerachBar";
+import HomeLayout from "./components/HomeLayout";
+import Genres from "./pages/Genres";
+import Tracks from "./pages/Tracks";
+import Playlist from "./pages/Playlist";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
@@ -47,6 +48,14 @@ function App() {
     setLoggedInUser(null);
     navigate("/");
   };
+
+  const handleGenreClick = (id:string)=>{
+    navigate(`/tracks/${id}`);
+  }
+
+  const handlePlaylistClick = (id: string) => {
+    navigate(`/playlist/${id}`);
+  };
   return (
     <>
       <Navbar
@@ -54,8 +63,8 @@ function App() {
         onLogOutSuccessful={handleLogout}
         links={
           <div className={styles.links}>
-            <NavLink to={"/signup"}>Signup</NavLink>
-            <NavLink to={"/login"}>Login</NavLink>
+            <NavLink to={"/api/signup"}>Signup</NavLink>
+            <NavLink to={"/api/login"}>Login</NavLink>
           </div>
         }
         homeLink={
@@ -70,24 +79,23 @@ function App() {
         }
       />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              sideBar={<Sidebar />}
-              serchBar={<SerachBar />}
-            />
-          }
-        />
-        <Route
-          path="signup"
-          element={<SignUp onSuccessfulSignUp={handleSignup} />}
-        />
-        <Route
-          path="login"
-          element={<Login onSuccessfulLogin={handleLogin} />}
-        />
-        <Route path="profile" element={<Profile />} />
+        <Route path="/" element={<HomeLayout />}>
+          <Route path="/" element={<Genres onClick={handleGenreClick} />} />
+          <Route path="/tracks/:id" element={<Tracks onClick={handlePlaylistClick}/>} />
+          <Route path="/playlist/:id" element={<Playlist />} />
+        </Route>
+
+        <Route path="/api">
+          <Route
+            path="signup"
+            element={<SignUp onSuccessfulSignUp={handleSignup} />}
+          />
+          <Route
+            path="login"
+            element={<Login onSuccessfulLogin={handleLogin} />}
+          />
+          <Route path="profile" element={<Profile />} />
+        </Route>
         <Route path="*" element={<NotFoundPg />} />
       </Routes>
     </>

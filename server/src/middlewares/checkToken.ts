@@ -15,6 +15,7 @@ export const checkToken = async (req: Request, res: Response, next: NextFunction
     if (!accessToken || (expiresAt && Date.now() >= expiresAt)) {
       await SpotifyController.getSpotifyToken();
     }
+    req.accessToken = accessToken.access_token;
     next();
   } catch (er) {
     createHttpError(500, "Failed to refresh token");

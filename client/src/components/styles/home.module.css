@@ -21,4 +21,7 @@
     display: none;
     background-color: transparent;
   }
+  .container{
+    grid-template-columns: 100%;
+  }
 }
