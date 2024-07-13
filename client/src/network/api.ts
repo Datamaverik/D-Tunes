@@ -60,3 +60,24 @@ export const logout = async () => {
     if (er instanceof AxiosError) alert(er.response?.data.message);
   }
 };
+
+export const getLikedSongs = async () => {
+  try {
+    const response = await api.get("/api/users/likedSongs");
+    return response.data;
+  } catch (er) {
+    console.error(er);
+  }
+};
+
+interface songIdObj {
+  songId: string;
+}
+export const toggleLike = async (songId: songIdObj) => {
+  try {
+    const response = await api.post("/api/users/toggleLike", songId);
+    return response.data;
+  } catch (er) {
+    console.error(er);
+  }
+};

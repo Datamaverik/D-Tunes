@@ -13,6 +13,7 @@ import HomeLayout from "./components/HomeLayout";
 import Genres from "./pages/Genres";
 import Tracks from "./pages/Tracks";
 import Playlist from "./pages/Playlist";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
@@ -22,7 +23,9 @@ function App() {
     const fetchLoggedInUser = async () => {
       try {
         const response = await getLoggedInUser();
-        if (!response) return;
+        if (!response) {
+          return;
+        }
         setLoggedInUser(response.user.username);
         navigate("/");
       } catch (er) {
@@ -49,9 +52,9 @@ function App() {
     navigate("/");
   };
 
-  const handleGenreClick = (id:string)=>{
+  const handleGenreClick = (id: string) => {
     navigate(`/tracks/${id}`);
-  }
+  };
 
   const handlePlaylistClick = (id: string) => {
     navigate(`/playlist/${id}`);
@@ -79,10 +82,15 @@ function App() {
         }
       />
       <Routes>
-        <Route path="/" element={<HomeLayout />}>
-          <Route path="/" element={<Genres onClick={handleGenreClick} />} />
-          <Route path="/tracks/:id" element={<Tracks onClick={handlePlaylistClick}/>} />
-          <Route path="/playlist/:id" element={<Playlist />} />
+        <Route element={<PrivateRoute loggedInUser={loggedInUser} />}>
+          <Route path="/" element={<HomeLayout />}>
+            <Route path="/" element={<Genres onClick={handleGenreClick} />} />
+            <Route
+              path="/tracks/:id"
+              element={<Tracks onClick={handlePlaylistClick} />}
+            />
+            <Route path="/playlist/:id" element={<Playlist />} />
+          </Route>
         </Route>
 
         <Route path="/api">

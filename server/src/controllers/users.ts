@@ -120,3 +120,52 @@ export const currentUser = async (
     next(er);
   }
 };
+
+export const toggleLike = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) throw createHttpError(401, "Unatuthorized: No token provided");
+    const decoded = jwt.verify(token, env.JWT_SECRET!) as {
+      userId: mongoose.Types.ObjectId;
+    };
+    const user = await UserModel.findById(decoded.userId).exec();
+    if (!user) throw createHttpError(404, "User not found");
+
+    const songId = req.body.songId;
+    if (!songId) throw createHttpError(400, "Song id not provided");
+
+    if (user.liked_songs.includes(songId)) {
+      user.liked_songs = user.liked_songs.filter((id) => id !== songId);
+    } else {
+      user.liked_songs.push(songId);
+    }
+    await user.save();
+    res.status(200).json(user.liked_songs);
+  } catch (er) {
+    next(er);
+  }
+};
+
+export const fetchLikedSongs = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) throw createHttpError(401, "Unatuthorized: No token provided");
+    const decoded = jwt.verify(token, env.JWT_SECRET!) as {
+      userId: mongoose.Types.ObjectId;
+    };
+    const user = await UserModel.findById(decoded.userId).exec();
+    if (!user) throw createHttpError(404, "User not found");
+
+    res.status(200).json(user.liked_songs);
+  } catch (er) {
+    next(er);
+  }
+};

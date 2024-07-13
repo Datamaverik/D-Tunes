@@ -16,6 +16,7 @@ const UserSchema = new Schema({
     unique: true,
   },
   password: { type: String, required: true, minLength: 3, maxLength: 255 },
+  liked_songs: { type: [String], default: [] },
 });
 
 type User = InferSchemaType<typeof UserSchema>;

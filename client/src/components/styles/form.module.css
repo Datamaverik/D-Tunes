@@ -63,7 +63,7 @@
   flex-direction: column;
 }
 .banner{
-  background-image: url('./login-banner.jpg');
+  background-image: url('../public/login-banner.jpg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
