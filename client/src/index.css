@@ -8,12 +8,12 @@
 }
 
 :root {
-  --background-color: #06141B;
-  --foreground-color: #4A5C6A;
-  --foregound-neg: #253745;
-  --foregound-pos: #9BA8AB;
-  --header: #11212D;
-  --text-color: #CCD0CF;
+  --background-color: #141414;
+  --foreground-color: #628e84;
+  --foregound-neg: #263733;
+  --foregound-pos: #486860;
+  --header: #00765c;
+  --text-color: #e2e2e2;
 }
 
 body {
@@ -21,6 +21,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: var(--background-color);
+  background-image: url('../public/login-bg-pattern.png');
   color: var(--text-color);
   font-family: Nunito Verdana, Geneva, Tahoma, sans-serif;
   font-size: 1.2rem;

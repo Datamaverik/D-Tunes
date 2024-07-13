@@ -55,6 +55,7 @@ const PlaylistView = ({
       <div className={styles.songName}>
         <p onClick={onClick}>{name}</p>
         <img
+        className={styles.likeLogo}
           id={`likeLogo-${songId}`} // Use a unique id
           onClick={() => handleClick(songId)}
           src={imgSrc}

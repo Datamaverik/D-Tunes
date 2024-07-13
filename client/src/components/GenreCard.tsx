@@ -9,7 +9,7 @@ interface genreCardProps {
 
 const GenreCard = ({ icon, name, onClick }: genreCardProps) => {
   return (
-    <div>
+    <div className={styles.genreCard}>
       <div
         onClick={onClick}
         className={styles.imageCont}

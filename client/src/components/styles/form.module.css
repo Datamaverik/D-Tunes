@@ -183,9 +183,9 @@
   left: 2px;
   width: 24px;
   height: 24px;
-  border: 1px solid #4d4d4d;
+  border: 1px solid #005643;
   border-radius: 50%;
-  background-color: #fafafa;
+  background-color: #009676;
   box-sizing: border-box;
   transition: all .25s ease;
 }
