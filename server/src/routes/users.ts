@@ -11,8 +11,10 @@ router.post("/login", UserController.login);
 
 router.post("/logout", UserController.logout);
 
-router.post('/toggleLike',UserController.toggleLike);
+router.post("/toggleLike", UserController.toggleLike);
 
-router.get('/likedSongs',UserController.fetchLikedSongs);
+router.get("/likedSongs", UserController.fetchLikedSongs);
+
+router.get("/search", UserController.searchUsers);
 
 export default router;

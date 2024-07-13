@@ -81,3 +81,14 @@ export const toggleLike = async (songId: songIdObj) => {
     console.error(er);
   }
 };
+
+export const getSearchedUsers = async (query: string) => {
+  try {
+    const response = await api.get("/api/users/search", {
+      params: { q: query },
+    });
+    return response.data;
+  } catch (er) {
+    console.error(er);
+  }
+};

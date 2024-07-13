@@ -100,6 +100,22 @@ export const logout: RequestHandler = async (req, res, next) => {
   res.clearCookie("token").json({ message: "Logged out successfully" });
 };
 
+export const searchUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const query = req.query.q as string;
+  if (!query) throw createHttpError(400, "query not provided");
+
+  try {
+    const users = await UserModel.find({ username: new RegExp(query, "i") });
+    res.status(200).json(users);
+  } catch (er) {
+    next(er);
+  }
+};
+
 export const currentUser = async (
   req: Request,
   res: Response,

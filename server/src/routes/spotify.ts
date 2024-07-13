@@ -29,5 +29,6 @@ router.get('/playlist/:trackId',checkToken,SpotifyController.getTrack);
 router.get("/access-token", checkToken, (req, res) => {
   res.json({ accessToken: req.accessToken });
 });
+router.get('/search',checkToken,SpotifyController.searchSpotify);
 
 export default router;

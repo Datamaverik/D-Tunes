@@ -47,7 +47,18 @@ export const getTrack = async (trackId: string) => {
 
 export const getAccessToken = async () => {
   try {
-    const response = await api.get('/api/songs/access-token');
+    const response = await api.get("/api/songs/access-token");
+    return response.data;
+  } catch (er) {
+    console.error(er);
+  }
+};
+
+export const getSerchedSongs = async (query: string) => {
+  try {
+    const response = await api.get("/api/songs/search", {
+      params: { q: query },
+    });
     return response.data;
   } catch (er) {
     console.error(er);

@@ -150,3 +150,30 @@ export const getTrack = async (
     next(er);
   }
 };
+
+export const searchSpotify = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const query = req.query.q as string;
+  if (!query) throw createHttpError(400, "Query is not provided");
+
+  try {
+    const token = await tokenModel.findById(env.TOKEN_ID);
+    const accessToken = token?.access_token;
+
+    const response = await axios.get(`${baseURL}/search`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        q: query,
+        type: "track",
+      },
+    });
+    res.status(200).json(response.data.tracks.items);
+  } catch (er) {
+    next(er);
+  }
+};

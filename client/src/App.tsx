@@ -14,6 +14,7 @@ import Genres from "./pages/Genres";
 import Tracks from "./pages/Tracks";
 import Playlist from "./pages/Playlist";
 import PrivateRoute from "./components/PrivateRoute";
+import Searchlist from "./pages/Searchlist";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
@@ -90,6 +91,7 @@ function App() {
               element={<Tracks onClick={handlePlaylistClick} />}
             />
             <Route path="/playlist/:id" element={<Playlist />} />
+            <Route path="/serachlist" element={<Searchlist />} />
           </Route>
         </Route>
 

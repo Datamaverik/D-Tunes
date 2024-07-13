@@ -1,4 +1,4 @@
-@import url('../../index.css');
+@import url("../../index.css");
 
 .inputArea {
   display: flex;
@@ -15,7 +15,7 @@
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-::placeholder{
+::placeholder {
   color: var(--background-color);
 }
 .inputArea:focus {
@@ -37,10 +37,10 @@
   display: block;
   width: 100%;
   margin-top: -10px;
-  font-size:1em;
+  font-size: 1em;
   color: #dc3545;
 }
-.formGroup{
+.formGroup {
   margin: 0.5rem;
   border-radius: 10px;
   box-shadow: 0px 0px 5px black;
@@ -51,19 +51,19 @@
   align-items: center;
   background-color: var(--foregound-neg);
 }
-.textGroup{
+.textGroup {
   margin: 5px;
 }
-.formLabel{
+.formLabel {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
-.formCont{
+.formCont {
   display: flex;
   align-items: center;
   flex-direction: column;
 }
-.banner{
-  background-image: url('../public/login-banner.jpg');
+.banner {
+  background-image: url("../public/login-banner.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -71,24 +71,144 @@
   min-width: 50vw;
   border-radius: 10px;
 }
-.loginCont{
+.loginCont {
   padding: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+.searchBar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+.searchInput {
+  width: 100%;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: none;
+  background-color: var(--foregound-neg);
+  color: var(--text-color);
+}
+.searchInput:focus {
+  border: 1px solid red;
+}
+.searchInput::placeholder {
+  color: var(--text-color);
+}
+
+.searchIcon {
+  border: none;
+  background-color: transparent;
+  padding: none;
+}
+.searchIcon:hover {
+  background-color: transparent;
+}
+.searchIcon img:hover {
+  cursor: pointer;
+  filter: drop-shadow(0px 0px 5px white);
+}
+/* Toggle button css */
+.toggle {
+  touch-action: pan-x;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+  padding: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+}
+.toggleInput {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.toggleCheck,
+.toggleUncheck {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 0;
+  bottom: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+  line-height: 0;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.toggleCheck{
+  left: 8px;
+}
+.toggleUncheck{
+  opacity: 1;
+  right: 10px;
+}
+.toggleUncheck span,.toggleCheck span{
+  align-items: center;
+  display: flex;
+  height: 10px;
+  justify-content: center;
+  position: relative;
+  width: 10px;
+}
+.toggleCont{
+  width: 53px;
+  margin-right: 5px;
+  height: 28px;
+  padding: 0;
+  border-radius: 30px;
+  background-color:var(--foreground-color);
+  transition: all .2s ease;
+}
+.toggleCircle{
+  transition: all .5s cubic-bezier(.23,1,.32,1) 0ms;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #4d4d4d;
+  border-radius: 50%;
+  background-color: #fafafa;
+  box-sizing: border-box;
+  transition: all .25s ease;
+}
+.toggleChecked .toggleCheck{
+  opacity: 1;
+}
+.toggleChecked .toggleUncheck{
+  opacity: 0;
+}
+.toggleChecked .toggleCircle{
+  left: 27px;
+}
 
 @media (min-width: 768px) {
-  .loginCont{
+  .loginCont {
     display: flex;
     flex-direction: row;
   }
-  .banner{
+  .banner {
     min-height: 80vh;
     min-width: 40vw;
   }
-  .formGroup{
+  .formGroup {
     margin: 2rem;
   }
 }
