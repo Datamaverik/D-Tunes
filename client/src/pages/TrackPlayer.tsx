@@ -2,6 +2,8 @@ import * as SpotifyApi from "../network/spotify";
 import { useEffect, useState } from "react";
 import styles from "../components/styles/Genre.module.css";
 import { TracksInPlaylist } from "../models/TracksInPlaylist";
+import * as PlaylistApi from "../network/playlist";
+import { fetchedPlaylistModel } from "../components/Sidebar";
 
 interface TrackPlayerProps {
   id: string | null;
@@ -15,6 +17,8 @@ const TrackPlayer = ({ id, playlistId }: TrackPlayerProps) => {
   const [tracks, setTracks] = useState<TracksInPlaylist[]>([]);
   const [audio, setAudio] = useState<string | null>(null);
   const [currentTrack, setCurrentTrack] = useState<TracksInPlaylist>();
+  const [showDropdown, setShowDropDown] = useState<boolean>(false);
+  const [playlists, setPlaylists] = useState<fetchedPlaylistModel[]>([]);
 
   // async function getChosenTrack() {
   //   try {
@@ -39,8 +43,18 @@ const TrackPlayer = ({ id, playlistId }: TrackPlayerProps) => {
     }
   }
 
+  async function fetchPlaylists() {
+    try {
+      const res = await PlaylistApi.getAllUserPlaylists();
+      setPlaylists(res);
+    } catch (er) {
+      console.error(er);
+    }
+  }
+
   useEffect(() => {
     getPlaylistsTracks();
+    fetchPlaylists();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -78,22 +92,63 @@ const TrackPlayer = ({ id, playlistId }: TrackPlayerProps) => {
     setAudio(nextTrack.track.preview_url);
   };
 
+  const handleAddSong = async (playlistId: string) => {
+    try {
+      if (!currentTrack) return;
+      const response = await PlaylistApi.addRemPlaylist(
+        playlistId,
+        currentTrack.track.id,
+        currentTrack.track.duration_ms / 1000
+      );
+      alert("Song added to playlist");
+      console.log(response);
+    } catch (er) {
+      console.error(er);
+    }
+  };
+
   const handleEnd = () => {
     playNextSong();
   };
 
   return (
     <div className={styles.trackPlayer}>
+      {showDropdown && (
+        <div className={styles.dropDown}>
+          {playlists.map((playlist, ind) => (
+            <div
+              className={styles.dropDownItems}
+              key={ind}
+              onClick={() => handleAddSong(playlist._id)}
+            >
+              {playlist.name}
+            </div>
+          ))}
+        </div>
+      )}
       <figure className={styles.playerCont}>
         <figcaption className={styles.caption}>
           {currentTrack?.track.name}
         </figcaption>
-        <audio
-          controls
-          id="audio-preview"
-          onEnded={handleEnd}
-          autoPlay={false}
-        />
+        <div className={styles.audioCont}>
+          <audio
+            className={styles.audioPreview}
+            controls
+            id="audio-preview"
+            onEnded={handleEnd}
+            autoPlay={false}
+          />
+          <button
+            onClick={() => setShowDropDown(!showDropdown)}
+            className={styles.addBtn}
+          >
+            <img
+              className={styles.addImg}
+              src="../../public/addIcon.svg"
+              alt=""
+            />
+          </button>
+        </div>
       </figure>
     </div>
   );

@@ -16,7 +16,6 @@ const Searchlist = () => {
     try {
       const response = await UserApi.getLikedSongs();
       setLikedSongs(response);
-      // console.log(response);
     } catch (er) {
       console.error(er);
     }

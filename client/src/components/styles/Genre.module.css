@@ -25,7 +25,7 @@
   font-family: Nunito;
   transition: all 0.3s ease-in-out;
 }
-.imageCont:hover{
+.imageCont:hover {
   cursor: pointer;
   filter: drop-shadow(0px 0px 4px rgba(255, 255, 255, 0.476));
 }
@@ -48,7 +48,7 @@
   transition: all 0.3s ease-in-out;
   padding: 5px;
 }
-.songCont:hover{
+.songCont:hover {
   cursor: pointer;
   background-color: rgba(188, 188, 188, 0.288);
   backdrop-filter: blur(2px);
@@ -72,14 +72,14 @@
   min-width: 20px;
   min-height: 20px;
 }
-.likeLogo:hover{
+.likeLogo:hover {
   filter: drop-shadow(0px 0px 3px green);
 }
 .trackPlayer {
   margin: 0px;
   position: fixed;
-  width: 100%;
   bottom: 0px;
+  width: 70%;
 }
 .playerCont {
   margin: 0px;
@@ -92,8 +92,40 @@
   backdrop-filter: blur(5px);
   border-radius: 5px;
 }
-.caption{
+.audioCont {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.addBtn {
+  margin-left: 1rem;
+  background-color: transparent;
+}
+.addBtn:hover {
+  background-color: transparent;
+  filter: drop-shadow(0px 0px 2px rgb(206, 206, 206));
+}
+.addImg {
+  height: 40px;
+  width: 40px;
+}
+.caption {
   margin-bottom: 5px;
+}
+.dropDown {
+  background-color: rgba(53, 88, 81, 0.284);
+  backdrop-filter: blur(5px);
+  margin: 0px;
+  width: 25%;
+  margin-left: 60%;
+  padding: 5px;
+  border-radius: 5px 5px 0px 0px;
+  right: 0px;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+.dropDownItems {
+  text-decoration: none;
 }
 
 @media (max-width: 768px) {
@@ -102,5 +134,8 @@
   }
   .imageCont {
     min-width: 50vw;
+  }
+  .trackPlayer {
+    width: 100%;
   }
 }

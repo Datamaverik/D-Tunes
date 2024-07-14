@@ -1,7 +1,7 @@
 import { icons } from "../models/icons";
 import styles from "../components/styles/Genre.module.css";
 import * as UserApi from "../network/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface PlaylistViewProps {
   icon: icons;
@@ -34,7 +34,8 @@ const PlaylistView = ({
     );
 
     try {
-      await UserApi.toggleLike(songObj);
+      const response = await UserApi.toggleLike(songObj);
+      console.log(response);
     } catch (er) {
       console.error(er);
       // Revert the imgSrc state if the API call fails
@@ -46,6 +47,10 @@ const PlaylistView = ({
     }
   }
 
+  useEffect(() => {
+    setImgSrc(isLiked ? "../public/liked.svg" : "../public/notLiked.svg");
+  }, [isLiked]);
+
   return (
     <div className={styles.songCont}>
       <div
@@ -55,7 +60,7 @@ const PlaylistView = ({
       <div className={styles.songName}>
         <p onClick={onClick}>{name}</p>
         <img
-        className={styles.likeLogo}
+          className={styles.likeLogo}
           id={`likeLogo-${songId}`} // Use a unique id
           onClick={() => handleClick(songId)}
           src={imgSrc}

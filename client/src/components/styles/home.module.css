@@ -1,27 +1,35 @@
-@import url('../../index.css');
+@import url("../../index.css");
 
-.container{
-    display: grid;
-    padding: 1rem;
-    grid-template-columns: 25% 75%;
+.container {
+  display: grid;
+  padding: 1rem;
+  grid-template-columns: 30% 70%;
+  margin-top: 100px;
 }
 
-.sideBar{
-    display: flex;
+.sideBar {
+  display: flex;
 }
 
-.content{
-    display: flex;
-    flex-direction: column;
+.content {
+  display: flex;
+  flex-direction: column;
 }
 
 /* CSS for small screens */
 @media (max-width: 768px) {
-  .sideBar {
-    display: none;
-    background-color: transparent;
+  .sideBar.show {
+    display: flex;
+    position: fixed;
+    width: 100%;
+    z-index: 9;
+    margin-top: 70px;
   }
-  .container{
+  .sideBar.hide {
+    display: none;
+  }
+  .container {
     grid-template-columns: 100%;
+    margin-top: 60px;
   }
 }

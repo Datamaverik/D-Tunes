@@ -15,9 +15,11 @@ import Tracks from "./pages/Tracks";
 import Playlist from "./pages/Playlist";
 import PrivateRoute from "./components/PrivateRoute";
 import Searchlist from "./pages/Searchlist";
+import UserTracks from "./pages/UserTracks";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -60,31 +62,38 @@ function App() {
   const handlePlaylistClick = (id: string) => {
     navigate(`/playlist/${id}`);
   };
+
+  const toggleSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
+  };
   return (
     <>
-      <Navbar
-        loggedInUser={loggedInUser}
-        onLogOutSuccessful={handleLogout}
-        links={
-          <div className={styles.links}>
-            <NavLink to={"/api/signup"}>Signup</NavLink>
-            <NavLink to={"/api/login"}>Login</NavLink>
-          </div>
-        }
-        homeLink={
-          <NavLink to={"/"}>
-            <img
-              className={styles.logos}
-              src="../icons8-home.svg"
-              alt=""
-              id="home-logo"
-            />
-          </NavLink>
-        }
-      />
+      <div className={styles.navbarCont}>
+        <Navbar
+          loggedInUser={loggedInUser}
+          onLogOutSuccessful={handleLogout}
+          onToggleSidebar={toggleSidebar}
+          links={
+            <div className={styles.links}>
+              <NavLink to={"/api/signup"}>Signup</NavLink>
+              <NavLink to={"/api/login"}>Login</NavLink>
+            </div>
+          }
+          homeLink={
+            <NavLink to={"/"}>
+              <img
+                className={styles.logos}
+                src="../icons8-home.svg"
+                alt=""
+                id="home-logo"
+              />
+            </NavLink>
+          }
+        />
+      </div>
       <Routes>
         <Route element={<PrivateRoute loggedInUser={loggedInUser} />}>
-          <Route path="/" element={<HomeLayout />}>
+          <Route path="/" element={<HomeLayout isSidebarVisible={isSidebarVisible}/>}>
             <Route path="/" element={<Genres onClick={handleGenreClick} />} />
             <Route
               path="/tracks/:id"
@@ -92,6 +101,7 @@ function App() {
             />
             <Route path="/playlist/:id" element={<Playlist />} />
             <Route path="/serachlist" element={<Searchlist />} />
+            <Route path="/userTracks" element={<UserTracks />} />
           </Route>
         </Route>
 

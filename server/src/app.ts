@@ -2,7 +2,8 @@ import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import UserRoutes from "./routes/users";
-import SongRoutes from './routes/spotify';
+import SongRoutes from "./routes/spotify";
+import PlaylistRoutes from "./routes/playlist";
 import cookieParser from "cookie-parser";
 import createHttpError, { isHttpError } from "http-errors";
 import env from "./utils/validateEnv";
@@ -20,7 +21,8 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 app.use("/api/users", UserRoutes);
-app.use('/api/songs',SongRoutes);
+app.use("/api/songs", SongRoutes);
+app.use("/api/playlist",PlaylistRoutes);
 
 //  for catching the unknown route calling errors
 app.use((req, res, next) => {

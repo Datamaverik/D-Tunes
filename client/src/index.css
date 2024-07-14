@@ -9,8 +9,8 @@
 
 :root {
   --background-color: #141414;
-  --foreground-color: #628e84;
-  --foregound-neg: #263733;
+  --foreground-color: #87bcb6;
+  --foregound-neg: #212b2b;
   --foregound-pos: #486860;
   --header: #00765c;
   --text-color: #e2e2e2;
@@ -22,6 +22,9 @@ body {
   min-height: 100vh;
   background-color: var(--background-color);
   background-image: url('../public/login-bg-pattern.png');
+  background-attachment: fixed;
+  background-position: center;
+  background-size: contain;
   color: var(--text-color);
   font-family: Nunito Verdana, Geneva, Tahoma, sans-serif;
   font-size: 1.2rem;

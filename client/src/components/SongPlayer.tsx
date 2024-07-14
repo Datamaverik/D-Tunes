@@ -2,6 +2,8 @@ import * as SpotifyApi from "../network/spotify";
 import { useEffect, useState } from "react";
 import styles from "../components/styles/Genre.module.css";
 import { Track } from "../models/SpotifyTrack";
+import * as PlaylistApi from "../network/playlist";
+import { fetchedPlaylistModel } from "./Sidebar";
 
 interface TrackPlayerProps {
   id: string | null;
@@ -15,6 +17,10 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
   const [tracks, setTracks] = useState<Track[]>(songs);
   const [audio, setAudio] = useState<string | null>(null);
   const [currentTrack, setCurrentTrack] = useState<Track>();
+  const [showDropdown, setShowDropDown] = useState<boolean>(false);
+  const [playlists, setPlaylists] = useState<fetchedPlaylistModel[]>(
+    []
+  );
 
   async function getChosenTrack() {
     try {
@@ -26,21 +32,19 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
     }
   }
 
-  //   async function getPlaylistsTracks() {
-  //     try {
-  //       if (!playlistId) return;
-  //       else {
-  //         const response = await SpotifyApi.getTracksOfPlaylist(playlistId);
-  //         setTracks(response);
-  //       }
-  //     } catch (er) {
-  //       console.error(er);
-  //     }
-  //   }
+  async function fetchPlaylists() {
+    try {
+      const res = await PlaylistApi.getAllUserPlaylists();
+      setPlaylists(res);
+    } catch (er) {
+      console.error(er);
+    }
+  }
 
   useEffect(() => {
     getChosenTrack();
     setTracks(songs);
+    fetchPlaylists();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [songs]);
 
@@ -78,20 +82,61 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
     setAudio(nextTrack.preview_url);
   };
 
+  const handleAddSong = async (playlistId: string) => {
+    try {
+      if (!currentTrack) return;
+      const response = await PlaylistApi.addRemPlaylist(
+        playlistId,
+        currentTrack.id,
+        currentTrack.duration_ms / 1000
+      );
+      alert("Song added to playlist");
+      console.log(response);
+    } catch (er) {
+      console.error(er);
+    }
+  };
+
   const handleEnd = () => {
     playNextSong();
   };
 
   return (
     <div className={styles.trackPlayer}>
+      {showDropdown && (
+        <div className={styles.dropDown}>
+          {playlists.map((playlist, ind) => (
+            <div
+              className={styles.dropDownItems}
+              key={ind}
+              onClick={() => handleAddSong(playlist._id)}
+            >
+              {playlist.name}
+            </div>
+          ))}
+        </div>
+      )}
       <figure className={styles.playerCont}>
         <figcaption className={styles.caption}>{currentTrack?.name}</figcaption>
-        <audio
-          controls
-          id="audio-preview"
-          onEnded={handleEnd}
-          autoPlay={false}
-        />
+        <div className={styles.audioCont}>
+          <audio
+            className={styles.audioPreview}
+            controls
+            id="audio-preview"
+            onEnded={handleEnd}
+            autoPlay={false}
+          />
+          <button
+            onClick={() => setShowDropDown(!showDropdown)}
+            className={styles.addBtn}
+          >
+            <img
+              className={styles.addImg}
+              src="../../public/addIcon.svg"
+              alt=""
+            />
+          </button>
+        </div>
       </figure>
     </div>
   );

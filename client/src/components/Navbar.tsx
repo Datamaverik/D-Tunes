@@ -7,6 +7,7 @@ interface NavBarProps {
   onLogOutSuccessful: () => void;
   links: ReactNode;
   homeLink: ReactNode;
+  onToggleSidebar: () => void;
 }
 
 const Navbar = ({
@@ -14,11 +15,13 @@ const Navbar = ({
   onLogOutSuccessful,
   links: children,
   homeLink,
+  onToggleSidebar,
 }: NavBarProps) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const handleToggleClick = () => {
     setIsCollapsed(!isCollapsed);
+    onToggleSidebar(); 
   };
   return (
     <nav className={styles.navbar}>

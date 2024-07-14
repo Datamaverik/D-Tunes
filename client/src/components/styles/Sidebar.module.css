@@ -1,0 +1,82 @@
+@import url("../../index.css");
+
+.sideBarCont {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: rgba(0, 8, 8, 0.4);
+  margin-right: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.playlistCont {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 0.5rem;
+  backdrop-filter: blur(3px);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  transition: all 0.3s ease-in-out;
+  background-color: rgba(43, 43, 43, 0.377);
+  justify-content: space-between;
+}
+.playlistCont:hover {
+  cursor: pointer;
+  background-color: rgba(82, 82, 82, 0.428);
+}
+.playlistImg {
+  height: 60px;
+  width: 60px;
+  margin-right: 0.7rem;
+  margin-left: 0.7rem;
+}
+.playlistName {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+.playlistDur {
+  font-size: 1rem;
+  color: gray;
+}
+.iconBtn{
+  background-color: transparent;
+}
+.iconBtn:hover{
+  cursor: pointer;
+  background-color: transparent;
+  filter: drop-shadow(0px 0px 3px white);
+}
+
+.dialogCont {
+  background-color: rgba(53, 88, 81, 0.284);
+  backdrop-filter: blur(5px);
+  color: var(--text-color);
+  text-shadow: 0px 0px 3px black;
+  border: none;
+  border-radius: 10px;
+}
+
+.dialogCont::backdrop{
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.checkboxCont{
+    display: flex;
+    align-items: center;
+    margin-top: -5px;
+    margin-bottom: 1rem;
+}
+.formGroup{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.closeBtn{
+    margin-left: 92%;
+}
+.btnCont{
+  display: flex;
+  gap: 1rem;
+}
