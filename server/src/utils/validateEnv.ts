@@ -14,4 +14,7 @@ export default cleanEnv(process.env, {
   SPOTIFY_BASE_URL: str(),
   SPOTIFY_TOKEN_ENDPOINT: str(),
   TOKEN_ID: str(),
+  CLOUDINARY_KEY: str(),
+  CLOUDINARY_SECRET: str(),
+  CLOUD_NAME: str(),
 });
