@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import UserModel from "../models/users";
 import env from "../utils/validateEnv";
+import * as CloudinaryController from "../utils/cloudinary";
 
 export const createPlaylist = async (
   req: Request,
@@ -14,7 +15,6 @@ export const createPlaylist = async (
   const name = req.body.name;
   const isPublic = req.body.isPublic;
   const imageUrl = req.body.imageUrl;
-  const songs = req.body.songs;
   try {
     const token = req.cookies.token;
     if (!token) throw createHttpError(401, "Unatuthorized: No token provided");
@@ -32,6 +32,19 @@ export const createPlaylist = async (
     if (existingPlaylistName)
       throw createHttpError(409, "Playlist name is already taken");
 
+    let publicId: string = "";
+    let defaultImgURL: string | null =
+      "https://i.ibb.co/vB2GsrM/default-playlist.png";
+    if (req.file) {
+      const response = await CloudinaryController.uploadOnCloudinary(
+        req.file.path
+      );
+      if (response) {
+        defaultImgURL = response?.url;
+        publicId = response.public_id;
+      }
+    }
+
     const newPlaylist = await PlaylistModel.create({
       author: user._id,
       name,
@@ -42,10 +55,11 @@ export const createPlaylist = async (
             {
               height: 60,
               width: 60,
-              url: "https://i.ibb.co/vB2GsrM/default-playlist.png",
+              url: defaultImgURL,
+              public_id: publicId,
             },
           ],
-      songs,
+      songs: [],
     });
     res.status(201).json(newPlaylist);
   } catch (er) {
@@ -186,9 +200,18 @@ export const removePlaylist = async (
 ) => {
   const playlistId = req.params.playlistId;
   try {
-    const playlist = await PlaylistModel.findByIdAndDelete(playlistId).exec();
+    const playlist = await PlaylistModel.findById(playlistId).exec();
     if (!playlist)
       throw createHttpError(404, "Some error occured while deleting playlist");
+
+    const public_id = playlist.images[0].public_id;
+    if (public_id) {
+      const response = await CloudinaryController.deleteFromCloudinary(
+        public_id
+      );
+      console.log(response);
+    }
+    await PlaylistModel.findByIdAndDelete(playlistId);
     res.status(200).json(playlist);
   } catch (er) {
     console.error(er);

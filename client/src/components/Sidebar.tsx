@@ -15,6 +15,13 @@ export interface fetchedPlaylistModel {
   images: icons[];
   duration: number;
 }
+interface playlistInput {
+  name: string;
+  isPublic: boolean;
+  songs: string[];
+  images: FileList;
+  duration: number;
+}
 
 const Sidebar = () => {
   const dialogBox = document.getElementById("myDialog") as HTMLDialogElement;
@@ -23,14 +30,24 @@ const Sidebar = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<playlistApi.playlistCredentials>();
+  } = useForm<playlistInput>();
 
   const [playlists, setPlaylists] = useState<fetchedPlaylistModel[]>([]);
 
-  async function onSubmit(credentials: playlistApi.playlistCredentials) {
+  async function onSubmit(credentials: playlistInput) {
     dialogBox.close();
     try {
-      const newPlaylist = await playlistApi.createPlaylist(credentials);
+      const formData = new FormData();
+      formData.append("name", credentials.name);
+      formData.append("isPublic", credentials.isPublic.toString());
+      if (credentials.images && credentials.images.length > 0) {
+        formData.append("image", credentials.images[0]);
+      }
+      
+      const newPlaylist = await playlistApi.createPlaylist(formData);
+      console.log(formData);
+      console.log("credentials sent from sidebar");
+
       setPlaylists([...playlists, newPlaylist]);
       console.log(newPlaylist);
     } catch (er) {
@@ -73,9 +90,17 @@ const Sidebar = () => {
         </button>
         <form
           action="post"
+          encType="multipart/form-data"
           className={styles.formGroup}
           onSubmit={handleSubmit(onSubmit)}
         >
+          <TextInputField
+            name="images"
+            label="Submit a thumbnail"
+            type="file"
+            register={register}
+            error={errors.images as FieldError}
+          />
           <TextInputField
             name="name"
             label="Name of Playlist"
@@ -117,7 +142,7 @@ const Sidebar = () => {
         >
           Create Playlist
         </button>
-        <LikedSongs/>
+        <LikedSongs />
         {playlists &&
           playlists.map((playlist) => (
             <UserPlaylists

@@ -13,12 +13,18 @@
   text-align: center;
   font-family: Nunito;
 }
+.genreCard{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .imageCont {
-  min-height: 30vh;
-  min-width: 25%;
+  height: 200px;
+  width: 200px;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -133,7 +139,8 @@
     grid-template-columns: 1fr 1fr;
   }
   .imageCont {
-    min-width: 50vw;
+    height: 200px;
+    width: 200px;
   }
   .trackPlayer {
     width: 100%;

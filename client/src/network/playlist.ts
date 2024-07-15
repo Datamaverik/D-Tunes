@@ -15,19 +15,26 @@ export interface playlistCredentials {
   name: string;
   isPublic: boolean;
   songs: string[];
-  images: icons[];
+  images: File;
   duration: number;
 }
-export const createPlaylist = async (credentials: playlistCredentials) => {
+export const createPlaylist = async (credentials: FormData) => {
   try {
-    const response = await api.post("/api/playlist/", credentials);
+    const response = await axios.post(`${baseURL}/api/playlist/`, credentials, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log(credentials);
+    console.log("credentials sent from playlist.network.ts");
     return response.data;
   } catch (er) {
     console.error(er);
   }
 };
 
-export const deletePlaylist = async (playlist:string) => {
+export const deletePlaylist = async (playlist: string) => {
   try {
     const response = await api.delete(`/api/playlist/delete/${playlist}`);
     return response.data;
