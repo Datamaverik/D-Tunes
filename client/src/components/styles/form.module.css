@@ -76,6 +76,11 @@
 .loginCont {
   padding: 1rem;
   display: flex;
+  background-image: 
+    linear-gradient(to bottom, rgba(0, 142, 111, 0.4), rgb(0, 0, 0)),url("../public/login-bg-pattern.png");
+  background-attachment: fixed;
+  background-position: center;
+  background-size: contain;
   flex-direction: column;
   justify-content: center;
   align-items: center;

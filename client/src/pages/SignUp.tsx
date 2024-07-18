@@ -3,6 +3,7 @@ import TextInputField from "../components/form/TextInputField";
 import styles from "../components/styles/form.module.css";
 import * as UserApi from "../network/api";
 import { AxiosError } from "axios";
+import useToast from "../CustomHooks/Toast.hook";
 
 interface SignUpPageProps {
   onSuccessfulSignUp: (username: string) => void;
@@ -15,6 +16,8 @@ const SignUp = ({ onSuccessfulSignUp }: SignUpPageProps) => {
     formState: { errors },
   } = useForm<UserApi.signUpCredentials>();
 
+  const { showToast } = useToast();
+
   async function onSubmit(credentials: UserApi.signUpCredentials) {
     try {
       const newUser = await UserApi.signUp(credentials);
@@ -23,8 +26,11 @@ const SignUp = ({ onSuccessfulSignUp }: SignUpPageProps) => {
         console.log(newUser);
       }
     } catch (er) {
-      console.error(er);
-      if (er instanceof AxiosError) alert(er.response?.data.message);
+      console.log("error");
+      if (er instanceof AxiosError) {
+        console.log("toast");
+        showToast(er.response?.data.message, "warning");
+      }
     }
   }
 

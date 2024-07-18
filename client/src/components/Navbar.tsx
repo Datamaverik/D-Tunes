@@ -7,7 +7,7 @@ interface NavBarProps {
   onLogOutSuccessful: () => void;
   links: ReactNode;
   homeLink: ReactNode;
-  onToggleSidebar: () => void;
+  onToggleSidebar: (isVisible: boolean) => void;
 }
 
 const Navbar = ({
@@ -18,22 +18,19 @@ const Navbar = ({
   onToggleSidebar,
 }: NavBarProps) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
-
   const handleToggleClick = () => {
     setIsCollapsed(!isCollapsed);
-    onToggleSidebar(); 
+    onToggleSidebar(!isCollapsed);
   };
   return (
     <nav className={styles.navbar}>
       <div className={styles.container}>
         <div className={styles.brand}>
-          {/* <img src={`/ADD-LOGO-SVG-HERE`} alt="Logo" className={styles.logo} /> */}
           {homeLink}
           <span>D-Tunes</span>
         </div>
         <div className={styles.hamburger}>
           <button className={styles.toggleButton} onClick={handleToggleClick}>
-            {/* {add svg of hamburger here} */}
             <img src="../public/hamburgerMenu.svg" alt="" />
           </button>
           <div

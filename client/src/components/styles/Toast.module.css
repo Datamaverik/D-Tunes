@@ -1,0 +1,122 @@
+:root {
+  --toast-success-hue: 150;
+  --toast-failure-hue: 20;
+  --toast-warning-hue: 205;
+  --toast-padding: 1.5em;
+  --toast-margin: 0.5em;
+  --toast-bg-color-fallback: hsl(var(--secondary-hue) 15% 100%);
+  --toast-text-color-fallback: hsl(var(--secondary-hue) 10% 25%);
+  --toast-opacity: 0.99;
+  --toast-content-gap: 1em;
+  --toast-speed: 250ms;
+  --toast-list-scrollbar-width: 0.35em;
+  --toast-list-width: 400px;
+  --toast-list-padding: 1em;
+}
+
+.toast {
+  z-index: 3000;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: var(--toast-padding);
+  border-radius: 0.5em;
+  position: relative;
+  backdrop-filter: blur(5px);
+}
+.toast--success {
+  box-shadow: 0px 1px 4px rgb(0, 139, 86), inset 0px -2px 0px rgb(0, 139, 86),
+    inset 2px 2px 2px rgba(208, 208, 208, 0.476);
+}
+.toast--failure {
+  box-shadow: 0px 1px 4px rgb(139, 0, 0), inset 0px -2px 0px rgb(139, 0, 0),
+    inset 2px 2px 2px rgba(208, 208, 208, 0.476);
+}
+
+.toast--warning {
+  box-shadow: 0px 1px 4px rgb(0, 99, 165), inset 0px -2px 0px rgb(0, 99, 165),
+    inset 2px 2px 2px rgba(208, 208, 208, 0.476);
+}
+
+.toast:hover {
+  opacity: 1;
+  box-shadow: hsl(var(--secondary-hue) 10% 10% / 30%) 0px 1px 3px 0px,
+    hsl(var(--secondary-hue) 10% 10% / 15%) 0px 1px 2px 0px;
+}
+
+.toast + .toast {
+  margin-top: var(--toast-margin);
+}
+
+.toastMessage {
+  display: flex;
+  gap: var(--toast-content-gap);
+}
+.toastMessage p {
+  font-size: 1.1rem;
+  text-shadow: 0px 0px 2px black;
+}
+
+.toastCloseBtn {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  padding: 0;
+  line-height: 1;
+  height: 1.3rem;
+  width: 1.3rem;
+  background: rgba(255, 0, 0, 0.503);
+  border: none;
+  cursor: pointer;
+  opacity: 0.75;
+}
+.toastCloseBtn:hover {
+  cursor: pointer;
+  background: red;
+}
+.toastCloseBtn svg {
+  fill: white;
+}
+
+.icon {
+  height: 1.5rem;
+  width: 1.5rem;
+  filter: drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.695));
+}
+
+.toastList {
+  z-index: 3000;
+  position: fixed;
+  padding: var(--toast-list-padding);
+  width: 100%;
+  max-width: var(--toast-list-width);
+  max-height: 100vh;
+  overflow: hidden auto;
+  top: 14vh;
+  right: 0vw;
+}
+
+@keyframes toast-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(10vw);
+  }
+}
+
+@keyframes toast-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(10vw);
+  }
+}
+
+.toastList {
+  animation: toast-in-right var(--toast-speed);
+}
+
+.toastList .toast {
+  transition: transform var(--toast-speed), opacity var(--toast-speed),
+    box-shadow var(--toast-speed) ease-in-out;
+}

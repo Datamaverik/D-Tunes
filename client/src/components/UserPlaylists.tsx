@@ -10,6 +10,7 @@ interface userPlaylistsProps {
   image: icons;
   playlistId: string;
   onDelete: (id: string) => void;
+
 }
 
 const UserPlaylists = ({
@@ -18,6 +19,7 @@ const UserPlaylists = ({
   image,
   onDelete,
   playlistId,
+
 }: userPlaylistsProps) => {
   const navigate = useNavigate();
   const formatTime = (time: number): string => {
@@ -33,6 +35,7 @@ const UserPlaylists = ({
   };
 
   const handleClick = async () => {
+
     try {
       const playlist: playlistApi.playlistCredentials =
         await playlistApi.getPlaylistById(playlistId);

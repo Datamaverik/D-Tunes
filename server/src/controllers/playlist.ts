@@ -143,21 +143,21 @@ export const addRemSongFromPlaylist = async (
     const playlist = await PlaylistModel.findById(playlistId).exec();
     if (!playlist) throw createHttpError(404, "Playlist not found");
 
-    // let songFound:boolean=false;
-    // playlist.songs.map(song=>{
-    //   if(song===songId)songFound=true;
-    // })
-
+    let isRemoved = false;
     if (playlist.songs.includes(songId)) {
       console.log("found");
       playlist.songs = playlist.songs.filter((song) => song !== songId);
       playlist.duration -= duration;
+      isRemoved = true;
     } else {
       playlist.duration += duration;
       playlist.songs.push(songId);
     }
     await playlist.save();
-    res.status(200).json(playlist.songs);
+    if (isRemoved)
+      return res.status(201).json({ message: "Removing song from playlist" });
+    else
+      return res.status(200).json({ message: "Adding song to the playlist" });
   } catch (er) {
     next(er);
   }

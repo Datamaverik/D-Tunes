@@ -20,9 +20,9 @@ export const uploadOnCloudinary = async (localFilePath: string) => {
     });
     //  file has been uploaded
     console.log("File is uploaded on cloudinary", response.url);
+    fs.unlinkSync(localFilePath); //  remove the locally saved temporary file as the upload option failed
     return response;
   } catch (error) {
-    fs.unlinkSync(localFilePath); //  remove the locally saved temporary file as the upload option failed
     return null;
   }
 };

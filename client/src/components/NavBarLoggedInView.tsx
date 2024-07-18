@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import * as UserApi from "../network/api";
 import styles from "./styles/Navbar.module.css";
+import useToast from "../CustomHooks/Toast.hook";
 
 interface NavBarLoggedInViewProps {
   user: string | null;
@@ -11,6 +12,7 @@ const NavBarLoggedInView = ({
   user,
   onLogOutSuccessful,
 }: NavBarLoggedInViewProps) => {
+  const { showToast } = useToast();
   async function logout() {
     try {
       const response = await UserApi.logout();
@@ -18,7 +20,7 @@ const NavBarLoggedInView = ({
       console.log(response);
     } catch (er) {
       console.error(er);
-      if (er instanceof Error) alert(er.message);
+      if (er instanceof Error) showToast(er.message, "failure");
     }
   }
   return (

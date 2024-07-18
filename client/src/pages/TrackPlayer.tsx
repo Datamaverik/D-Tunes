@@ -1,9 +1,10 @@
 import * as SpotifyApi from "../network/spotify";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "../components/styles/Genre.module.css";
 import { TracksInPlaylist } from "../models/TracksInPlaylist";
 import * as PlaylistApi from "../network/playlist";
 import { fetchedPlaylistModel } from "../components/Sidebar";
+import useToast from "../CustomHooks/Toast.hook";
 
 interface TrackPlayerProps {
   id: string | null;
@@ -19,17 +20,10 @@ const TrackPlayer = ({ id, playlistId }: TrackPlayerProps) => {
   const [currentTrack, setCurrentTrack] = useState<TracksInPlaylist>();
   const [showDropdown, setShowDropDown] = useState<boolean>(false);
   const [playlists, setPlaylists] = useState<fetchedPlaylistModel[]>([]);
+  const { showToast } = useToast();
 
-  // async function getChosenTrack() {
-  //   try {
-  //     if (!id) return;
-  //     const response = await SpotifyApi.getTrack(id);
-  //     setAudio(response.preview_url);
-  //     console.log(response);
-  //   } catch (er) {
-  //     console.error(er);
-  //   }
-  // }
+  const addBtn = useRef<HTMLButtonElement | null>(null);
+  const dropDown = useRef<HTMLDivElement | null>(null);
 
   async function getPlaylistsTracks() {
     try {
@@ -37,6 +31,7 @@ const TrackPlayer = ({ id, playlistId }: TrackPlayerProps) => {
       else {
         const response = await SpotifyApi.getTracksOfPlaylist(playlistId);
         setTracks(response);
+        setShowDropDown(false);
       }
     } catch (er) {
       console.error(er);
@@ -55,6 +50,23 @@ const TrackPlayer = ({ id, playlistId }: TrackPlayerProps) => {
   useEffect(() => {
     getPlaylistsTracks();
     fetchPlaylists();
+    setShowDropDown(false);
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropDown.current &&
+        !dropDown.current.contains(event.target as Node) &&
+        addBtn.current &&
+        !addBtn.current.contains(event.target as Node)
+      ) {
+        setShowDropDown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -75,6 +87,7 @@ const TrackPlayer = ({ id, playlistId }: TrackPlayerProps) => {
       audioElement.src = audio;
       audioElement.play();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audio]);
 
@@ -100,8 +113,8 @@ const TrackPlayer = ({ id, playlistId }: TrackPlayerProps) => {
         currentTrack.track.id,
         currentTrack.track.duration_ms / 1000
       );
-      alert("Song added to playlist");
-      console.log(response);
+      if (response?.status === 201) showToast(response.data.message, "failure");
+      else showToast(response?.data.message, "success");
     } catch (er) {
       console.error(er);
     }
@@ -114,10 +127,10 @@ const TrackPlayer = ({ id, playlistId }: TrackPlayerProps) => {
   return (
     <div className={styles.trackPlayer}>
       {showDropdown && (
-        <div className={styles.dropDown}>
+        <div className={styles.dropDown} ref={dropDown}>
           {playlists.map((playlist, ind) => (
             <div
-              className={styles.dropDownItems}
+              className={`${styles.dropDownItems}`}
               key={ind}
               onClick={() => handleAddSong(playlist._id)}
             >
@@ -141,6 +154,7 @@ const TrackPlayer = ({ id, playlistId }: TrackPlayerProps) => {
           <button
             onClick={() => setShowDropDown(!showDropdown)}
             className={styles.addBtn}
+            ref={addBtn}
           >
             <img
               className={styles.addImg}

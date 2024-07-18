@@ -1,9 +1,10 @@
 import * as SpotifyApi from "../network/spotify";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "../components/styles/Genre.module.css";
 import { Track } from "../models/SpotifyTrack";
 import * as PlaylistApi from "../network/playlist";
 import { fetchedPlaylistModel } from "./Sidebar";
+import useToast from "../CustomHooks/Toast.hook";
 
 interface TrackPlayerProps {
   id: string | null;
@@ -18,9 +19,10 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
   const [audio, setAudio] = useState<string | null>(null);
   const [currentTrack, setCurrentTrack] = useState<Track>();
   const [showDropdown, setShowDropDown] = useState<boolean>(false);
-  const [playlists, setPlaylists] = useState<fetchedPlaylistModel[]>(
-    []
-  );
+  const [playlists, setPlaylists] = useState<fetchedPlaylistModel[]>([]);
+  const { showToast } = useToast();
+  const addBtn = useRef<HTMLButtonElement | null>(null);
+  const dropDown = useRef<HTMLDivElement | null>(null);
 
   async function getChosenTrack() {
     try {
@@ -40,6 +42,24 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
       console.error(er);
     }
   }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropDown.current &&
+        !dropDown.current.contains(event.target as Node) &&
+        addBtn.current &&
+        !addBtn.current.contains(event.target as Node)
+      ) {
+        setShowDropDown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     getChosenTrack();
@@ -90,8 +110,8 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
         currentTrack.id,
         currentTrack.duration_ms / 1000
       );
-      alert("Song added to playlist");
-      console.log(response);
+      if (response?.status === 201) showToast(response.data.message, "failure");
+      else showToast(response?.data.message, "success");
     } catch (er) {
       console.error(er);
     }
@@ -104,7 +124,7 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
   return (
     <div className={styles.trackPlayer}>
       {showDropdown && (
-        <div className={styles.dropDown}>
+        <div className={styles.dropDown} ref={dropDown}>
           {playlists.map((playlist, ind) => (
             <div
               className={styles.dropDownItems}
@@ -129,6 +149,7 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
           <button
             onClick={() => setShowDropDown(!showDropdown)}
             className={styles.addBtn}
+            ref={addBtn}
           >
             <img
               className={styles.addImg}

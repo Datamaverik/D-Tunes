@@ -7,6 +7,11 @@
   src: url("./Nunito-Regular.53a5ca69.ttf") format('truetype');
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
 :root {
   --background-color: #141414;
   --foreground-color: #87bcb6;
@@ -21,13 +26,10 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: var(--background-color);
-  background-image: url('../public/login-bg-pattern.png');
-  background-attachment: fixed;
-  background-position: center;
-  background-size: contain;
   color: var(--text-color);
   font-family: Nunito Verdana, Geneva, Tahoma, sans-serif;
   font-size: 1.2rem;
+  position: relative;
 }
 
 button {

@@ -4,7 +4,7 @@ import { upload } from "../middlewares/multer";
 
 const router = express.Router();
 
-router.post("/",upload.single("image"), PlaylistController.createPlaylist);
+router.post("/", upload.single("image"), PlaylistController.createPlaylist);
 
 router.get("/allPublic", PlaylistController.getAllPublicPlaylists);
 

@@ -16,10 +16,15 @@ import Playlist from "./pages/Playlist";
 import PrivateRoute from "./components/PrivateRoute";
 import Searchlist from "./pages/Searchlist";
 import UserTracks from "./pages/UserTracks";
+import ToastList from "./components/ToastList";
+import useToast from "./CustomHooks/Toast.hook";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const { toasts, removeToast } = useToast();
+  const { showToast } = useToast();
+  // const [autoCloseDuration, setAutoCloseDuration] = useState(4);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,7 +37,7 @@ function App() {
         setLoggedInUser(response.user.username);
         navigate("/");
       } catch (er) {
-        if (er instanceof AxiosError) alert(er.response?.data.message);
+        if (er instanceof AxiosError) showToast(er.message, "failure");
         console.log(er);
       }
     };
@@ -66,13 +71,16 @@ function App() {
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
+
   return (
     <>
       <div className={styles.navbarCont}>
         <Navbar
           loggedInUser={loggedInUser}
           onLogOutSuccessful={handleLogout}
-          onToggleSidebar={toggleSidebar}
+          onToggleSidebar={() => {
+            toggleSidebar();
+          }}
           links={
             <div className={styles.links}>
               <NavLink to={"/api/signup"}>Signup</NavLink>
@@ -91,9 +99,13 @@ function App() {
           }
         />
       </div>
+      <ToastList removeToast={removeToast} data={toasts} />
       <Routes>
         <Route element={<PrivateRoute loggedInUser={loggedInUser} />}>
-          <Route path="/" element={<HomeLayout isSidebarVisible={isSidebarVisible}/>}>
+          <Route
+            path="/"
+            element={<HomeLayout isSidebarVisible={isSidebarVisible} />}
+          >
             <Route path="/" element={<Genres onClick={handleGenreClick} />} />
             <Route
               path="/tracks/:id"

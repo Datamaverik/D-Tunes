@@ -89,7 +89,7 @@ export const addRemPlaylist = async (
       `/api/playlist/addRemPlaylist/${playlistId}`,
       { song: songId, duration: duration }
     );
-    return response.data;
+    return response;
   } catch (er) {
     console.error(er);
   }

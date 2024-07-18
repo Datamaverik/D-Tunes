@@ -13,15 +13,19 @@
   text-align: center;
   font-family: Nunito;
 }
-.genreCard{
+.genreCard {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 .imageCont {
-  height: 200px;
-  width: 200px;
+  max-width: 400px;
+  max-height: 400px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  min-height: 165px;
+  min-width: 165px;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -40,6 +44,7 @@
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 1rem;
   justify-content: center;
+  flex-grow: 1;
 }
 
 .playlistView {
@@ -94,7 +99,7 @@
   justify-content: center;
   align-items: center;
   padding-top: 10px;
-  background-color: rgba(53, 88, 81, 0.284);
+  background-color: rgba(80, 80, 80, 0.284);
   backdrop-filter: blur(5px);
   border-radius: 5px;
 }
@@ -119,7 +124,7 @@
   margin-bottom: 5px;
 }
 .dropDown {
-  background-color: rgba(53, 88, 81, 0.284);
+  background-color: rgba(80, 80, 80, 0.284);
   backdrop-filter: blur(5px);
   margin: 0px;
   width: 25%;
@@ -132,15 +137,52 @@
 }
 .dropDownItems {
   text-decoration: none;
+  padding: 5px;
+  transition: all 0.3s ease-in-out;
+}
+.dropDownItems:hover{
+  transform: scale(1.2);
+  text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.579);
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {
   .genreCardCont {
     grid-template-columns: 1fr 1fr;
+    flex-grow: 1;
+  }
+
+  .genreCard {
+    min-width: 120px;
   }
   .imageCont {
-    height: 200px;
-    width: 200px;
+    min-width: 120px;
+    min-height: 120px;
+    max-width: 250px;
+    max-height: 250px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+  .trackPlayer {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+  .genreCardCont {
+    grid-template-columns: 1fr 1fr 1fr;
+    flex-grow: 1;
+  }
+  .genreCard {
+    min-width: 120px;
+  }
+  .imageCont {
+    min-width: 120px;
+    min-height: 120px;
+    max-width: 250px;
+    max-height: 250px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
   }
   .trackPlayer {
     width: 100%;

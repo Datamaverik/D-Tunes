@@ -2,7 +2,7 @@
 
 .navbar {
   background-color: var(--header);
-  background-image: linear-gradient(to right, #008e6f, #004536);
+  background-image: linear-gradient(to bottom, rgba(0, 142, 111, 0.4), var(--foregound-neg)), url('../public/login-bg-pattern.png');
   color: white;
   padding: 1rem;
   position: sticky;
