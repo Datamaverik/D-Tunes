@@ -1,23 +1,26 @@
 import * as SpotifyApi from "../network/spotify";
 import { useEffect, useRef, useState } from "react";
 import styles from "../components/styles/Genre.module.css";
-import { Track } from "../models/SpotifyTrack";
 import * as PlaylistApi from "../network/playlist";
+import * as TrackApi from "../network/tracks";
 import { fetchedPlaylistModel } from "./Sidebar";
 import useToast from "../CustomHooks/Toast.hook";
+import { isValidMongoObjectID } from "../utils/monogIdvalidator";
+import { fetchedTrack } from "../pages/Profile";
 
 interface TrackPlayerProps {
   id: string | null;
-  songs: Track[];
+  songs: fetchedTrack[];
 }
+
 
 const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
   const audioElement = document.getElementById(
     "audio-preview"
   ) as HTMLAudioElement;
-  const [tracks, setTracks] = useState<Track[]>(songs);
+  const [tracks, setTracks] = useState<fetchedTrack[]>(songs);
   const [audio, setAudio] = useState<string | null>(null);
-  const [currentTrack, setCurrentTrack] = useState<Track>();
+  const [currentTrack, setCurrentTrack] = useState<fetchedTrack>();
   const [showDropdown, setShowDropDown] = useState<boolean>(false);
   const [playlists, setPlaylists] = useState<fetchedPlaylistModel[]>([]);
   const { showToast } = useToast();
@@ -27,8 +30,13 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
   async function getChosenTrack() {
     try {
       if (!id) return;
-      const response = await SpotifyApi.getTrack(id);
-      setAudio(response.preview_url);
+      if (isValidMongoObjectID(id)) {
+        const response = await TrackApi.getTrackByID(id);
+        setAudio(response.preview_url);
+      } else {
+        const response = await SpotifyApi.getTrack(id);
+        setAudio(response.preview_url);
+      }
     } catch (er) {
       console.error(er);
     }
@@ -54,11 +62,15 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
         setShowDropDown(false);
       }
     };
+    getChosenTrack();
+    setTracks(songs);
+    fetchPlaylists();
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -70,7 +82,13 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
 
   useEffect(() => {
     if (tracks.length > 0) {
-      const track = tracks.find((track) => track.id === id);
+      let track;
+      if(!id)return;
+      if (isValidMongoObjectID(id)) {
+        track = tracks.find((track) => track.id === id);
+      } else {
+        track = tracks.find((track) => track.id === id);
+      }
       setCurrentTrack(track);
       if (track) {
         if (!track.preview_url) playNextSong(track);
@@ -88,7 +106,7 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audio]);
 
-  const playNextSong = (currTrack?: Track) => {
+  const playNextSong = (currTrack?: fetchedTrack) => {
     if (!currentTrack) return;
     let ind = tracks.indexOf(currentTrack);
     if (currTrack) ind = tracks.indexOf(currTrack);

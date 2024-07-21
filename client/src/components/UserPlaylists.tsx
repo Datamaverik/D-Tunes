@@ -2,7 +2,9 @@ import { icons } from "../models/icons";
 import styles from "../components/styles/Sidebar.module.css";
 import * as playlistApi from "../network/playlist";
 import * as spotifyApi from "../network/spotify";
+import * as trackApi from "../network/tracks";
 import { useNavigate } from "react-router-dom";
+import { isValidMongoObjectID } from "../utils/monogIdvalidator";
 
 interface userPlaylistsProps {
   name: string;
@@ -10,7 +12,6 @@ interface userPlaylistsProps {
   image: icons;
   playlistId: string;
   onDelete: (id: string) => void;
-
 }
 
 const UserPlaylists = ({
@@ -19,7 +20,6 @@ const UserPlaylists = ({
   image,
   onDelete,
   playlistId,
-
 }: userPlaylistsProps) => {
   const navigate = useNavigate();
   const formatTime = (time: number): string => {
@@ -35,13 +35,13 @@ const UserPlaylists = ({
   };
 
   const handleClick = async () => {
-
     try {
       const playlist: playlistApi.playlistCredentials =
         await playlistApi.getPlaylistById(playlistId);
-      const songPromises = playlist.songs.map((song: string) =>
-        spotifyApi.getTrack(song)
-      );
+      const songPromises = playlist.songs.map((song: string) => {
+        if (isValidMongoObjectID(song)) return trackApi.getTrackByID(song);
+        else return spotifyApi.getTrack(song);
+      });
       const songs = await Promise.all(songPromises);
       navigate("/serachlist", { state: { track: songs } });
     } catch (er) {

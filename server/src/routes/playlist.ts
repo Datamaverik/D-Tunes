@@ -1,6 +1,6 @@
 import express from "express";
-import * as PlaylistController from "../controllers/playlist";
 import { upload } from "../middlewares/multer";
+import * as PlaylistController from "../controllers/playlist";
 
 const router = express.Router();
 

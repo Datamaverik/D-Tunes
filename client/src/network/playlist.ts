@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { icons } from "../models/icons";
 
 const baseURL = "http://localhost:5000";
@@ -26,11 +26,10 @@ export const createPlaylist = async (credentials: FormData) => {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log(credentials);
-    console.log("credentials sent from playlist.network.ts");
     return response.data;
   } catch (er) {
     console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
   }
 };
 
@@ -40,6 +39,7 @@ export const deletePlaylist = async (playlist: string) => {
     return response.data;
   } catch (er) {
     console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
   }
 };
 
@@ -49,6 +49,7 @@ export const getAllPublicPlaylists = async () => {
     return response.data;
   } catch (er) {
     console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
   }
 };
 
@@ -56,8 +57,9 @@ export const getUserPvtPlaylists = async () => {
   try {
     const response = await api.get(`/api/playlist/userPrivate`);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (er) {
+    console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
   }
 };
 
@@ -65,8 +67,9 @@ export const getAllUserPlaylists = async () => {
   try {
     const response = await api.get(`/api/playlist/userAll`);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (er) {
+    console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
   }
 };
 
@@ -76,6 +79,7 @@ export const getPlaylistById = async (playlistId: string) => {
     return response.data;
   } catch (er) {
     console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
   }
 };
 
@@ -92,6 +96,7 @@ export const addRemPlaylist = async (
     return response;
   } catch (er) {
     console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
   }
 };
 
@@ -109,5 +114,6 @@ export const updatePlaylist = async (
     return response.data;
   } catch (er) {
     console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
   }
 };

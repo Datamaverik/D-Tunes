@@ -3,6 +3,7 @@ import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import UserRoutes from "./routes/users";
 import SongRoutes from "./routes/spotify";
+import TrackRoutes from './routes/tracks'
 import PlaylistRoutes from "./routes/playlist";
 import cookieParser from "cookie-parser";
 import createHttpError, { isHttpError } from "http-errors";
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 app.use("/api/users", UserRoutes);
+app.use("/api/tracks", TrackRoutes);
 app.use("/api/songs", SongRoutes);
 app.use("/api/playlist",PlaylistRoutes);
 

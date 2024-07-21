@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import styles from "../components/styles/Sidebar.module.css";
 import * as userApi from "../network/api";
 import * as spotifyApi from "../network/spotify";
+import * as trackApi from "../network/tracks";
 import { useNavigate } from "react-router-dom";
-import { Track } from "../models/SpotifyTrack";
+// import { Track } from "../models/SpotifyTrack";
+import { fetchedTrack } from "../pages/Profile";
+import { isValidMongoObjectID } from "../utils/monogIdvalidator";
 
 const LikedSongs = () => {
-  const [tracks, setTracks] = useState<Track[]>([]);
+  const [tracks, setTracks] = useState<fetchedTrack[]>([]);
   const [formatedTime, setFormattedTime] = useState<string>("0sec");
   const navigate = useNavigate();
 
@@ -31,12 +34,13 @@ const LikedSongs = () => {
   const fetchSongs = async () => {
     try {
       const playlist: string[] = await userApi.getLikedSongs();
-      const songPromises = playlist.map((song: string) =>
-        spotifyApi.getTrack(song)
-      );
+      const songPromises = playlist.map((song: string) => {
+        if (isValidMongoObjectID(song)) return trackApi.getTrackByID(song);
+        else return spotifyApi.getTrack(song);
+      });
       const songs = await Promise.all(songPromises);
       let duration: number = 0;
-      songs.map((song: Track) => {
+      songs.map((song: fetchedTrack) => {
         duration += song.duration_ms / 1000;
       });
       formatTime(duration);
@@ -63,9 +67,7 @@ const LikedSongs = () => {
         />
         <div className={styles.playlistTitle}>
           <div className={styles.playlistName}>Liked Songs</div>
-          <div className={styles.playlistDur}>
-            Duration: {formatedTime}
-          </div>
+          <div className={styles.playlistDur}>Duration: {formatedTime}</div>
         </div>
       </div>
     </div>

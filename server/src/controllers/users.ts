@@ -6,16 +6,12 @@ import sendCookie from "../utils/saveCookie";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import env from "../utils/validateEnv";
-// import mongoose from "mongoose";
-
-// const generateToken = (userId: mongoose.Types.ObjectId): string => {
-//   return jwt.sign({ userId }, env.JWT_SECRET!, { expiresIn: "1h" });
-// };
 
 interface SignUpBody {
   username?: string;
   email?: string;
   password?: string;
+  isArtist?: boolean;
 }
 export const signUp: RequestHandler<unknown, unknown, SignUpBody> = async (
   req,
@@ -49,12 +45,6 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody> = async (
       email,
       password: passwordHashed,
     });
-
-    // const token = generateToken(newUser._id);
-    // res.cookie("token", token, {
-    //   httpOnly: true,
-    //   maxAge: 60 * 60 * 1000,
-    // });
     sendCookie(newUser._id, res);
 
     res
@@ -62,6 +52,35 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody> = async (
       .json({ message: "User registered successfully", user: newUser });
   } catch (er) {
     next(er);
+  }
+};
+
+export const updateUser: RequestHandler = async (req, res, next) => {
+  const userId = req.params.userId;
+  const email = req.body.email;
+  const isArtist = req.body.isArtist;
+  const passwordRaw = req.body.password;
+  try {
+    if (email) {
+      const existingEmail = await UserModel.findOne({
+        email,
+      }).exec();
+
+      if (existingEmail) throw createHttpError(409, "Email already exists.");
+    }
+    let passwordHashed: string | null = null;
+    if (passwordRaw) passwordHashed = await bcrypt.hash(passwordRaw, 10);
+
+    let updatedUser = await UserModel.findById(userId).exec();
+    if (updatedUser) {
+      if (email) updatedUser.email = email;
+      if (passwordHashed) updatedUser.password = passwordHashed;
+      updatedUser.isArtist = isArtist;
+      await updatedUser.save();
+      return res.status(200).json(updatedUser);
+    }
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -93,6 +112,16 @@ export const login: RequestHandler<unknown, unknown, LoginBody> = async (
     res.status(200).json({ message: "Login successful", user });
   } catch (er) {
     next(er);
+  }
+};
+
+export const deleteUser: RequestHandler = async (req, res, next) => {
+  const userId = req.params.userId;
+  try {
+    const response = await UserModel.findByIdAndDelete(userId);
+    res.status(200).json({ message: "User account deleted successfully" });
+  } catch (error) {
+    next(error);
   }
 };
 

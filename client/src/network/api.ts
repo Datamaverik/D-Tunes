@@ -16,7 +16,7 @@ export const getLoggedInUser = async () => {
     return response.data;
   } catch (er) {
     console.error(er);
-    if (er instanceof AxiosError) alert(er.response?.data.message);
+    if (er instanceof AxiosError) throw new Error(er.message);
   }
 };
 
@@ -24,6 +24,7 @@ export interface signUpCredentials {
   username: string;
   password: string;
   email: string;
+  isArtist?: boolean;
 }
 
 export const signUp = async (credentials: signUpCredentials) => {
@@ -32,7 +33,7 @@ export const signUp = async (credentials: signUpCredentials) => {
     return response.data;
   } catch (er) {
     console.error(er);
-    if (er instanceof AxiosError) alert(er.response?.data.message);
+    if (er instanceof AxiosError) throw new Error(er.message);
   }
 };
 
@@ -47,7 +48,7 @@ export const login = async (credentials: loginCredentials) => {
     return response.data;
   } catch (er) {
     console.error(er);
-    if (er instanceof AxiosError) alert(er.response?.data.message);
+    if (er instanceof AxiosError) throw new Error(er.message);
   }
 };
 
@@ -57,7 +58,7 @@ export const logout = async () => {
     return response.data;
   } catch (er) {
     console.error(er);
-    if (er instanceof AxiosError) alert(er.response?.data.message);
+    if (er instanceof AxiosError) throw new Error(er.message);
   }
 };
 
@@ -67,6 +68,7 @@ export const getLikedSongs = async () => {
     return response.data;
   } catch (er) {
     console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.message);
   }
 };
 
@@ -79,6 +81,21 @@ export const toggleLike = async (songId: songIdObj) => {
     return response.data;
   } catch (er) {
     console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.message);
+  }
+};
+interface updateBody {
+  email?: string;
+  isArtist?: boolean;
+  passwordRaw?: string;
+}
+export const updateUser = async (userId: string, credentials: updateBody) => {
+  try {
+    const response = await api.post(`/api/users/update/${userId}`, credentials);
+    return response.data;
+  } catch (er) {
+    console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.message);
   }
 };
 
@@ -90,5 +107,16 @@ export const getSearchedUsers = async (query: string) => {
     return response.data;
   } catch (er) {
     console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.message);
+  }
+};
+
+export const deleteUser = async (userId: string) => {
+  try {
+    const response = await api.delete(`/api/users/delete/${userId}`);
+    return response.data;
+  } catch (er) {
+    console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.message);
   }
 };

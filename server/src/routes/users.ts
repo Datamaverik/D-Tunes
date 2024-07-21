@@ -17,4 +17,8 @@ router.get("/likedSongs", UserController.fetchLikedSongs);
 
 router.get("/search", UserController.searchUsers);
 
+router.post("/update/:userId", UserController.updateUser);
+
+router.delete("/delete/:userId", UserController.deleteUser);
+
 export default router;

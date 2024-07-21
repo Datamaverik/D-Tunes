@@ -7,8 +7,7 @@ import Navbar from "./components/Navbar";
 import styles from "./components/styles/Navbar.module.css";
 import { useEffect, useState } from "react";
 import { getLoggedInUser } from "./network/api";
-import { AxiosError } from "axios";
-import Profile from "./pages/Profile";
+import Profile, { FetchedUser } from "./pages/Profile";
 import HomeLayout from "./components/HomeLayout";
 import Genres from "./pages/Genres";
 import Tracks from "./pages/Tracks";
@@ -21,6 +20,8 @@ import useToast from "./CustomHooks/Toast.hook";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+  const[currentUser, setCurrentUser] = useState<FetchedUser | null>(null);
+  const [isArtist, setIsArtist] = useState<boolean>(false);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const { toasts, removeToast } = useToast();
   const { showToast } = useToast();
@@ -35,10 +36,14 @@ function App() {
           return;
         }
         setLoggedInUser(response.user.username);
+        setIsArtist(response.user.isArtist);
+        setCurrentUser(response.user);
         navigate("/");
       } catch (er) {
-        if (er instanceof AxiosError) showToast(er.message, "failure");
-        console.log(er);
+        if (er instanceof Error) {
+          showToast(er.message, "failure");
+          console.log(er.message);
+        }
       }
     };
     fetchLoggedInUser();
@@ -114,6 +119,7 @@ function App() {
             <Route path="/playlist/:id" element={<Playlist />} />
             <Route path="/serachlist" element={<Searchlist />} />
             <Route path="/userTracks" element={<UserTracks />} />
+            <Route path="profile" element={<Profile isArtist={isArtist} user={currentUser}/>} />
           </Route>
         </Route>
 
@@ -126,7 +132,6 @@ function App() {
             path="login"
             element={<Login onSuccessfulLogin={handleLogin} />}
           />
-          <Route path="profile" element={<Profile />} />
         </Route>
         <Route path="*" element={<NotFoundPg />} />
       </Routes>

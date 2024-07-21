@@ -65,11 +65,10 @@
   backdrop-filter: blur(2px);
 }
 .songImgCont {
-  width: 10%;
-  min-height: 10vh;
-  height: auto;
+  width: 3.5em;
+  height: 2.8em;
   background-position: center;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   margin-right: 1rem;
 }

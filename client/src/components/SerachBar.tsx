@@ -4,6 +4,7 @@ import styles from "../components/styles/form.module.css";
 import * as SpotifyApi from "../network/spotify";
 import * as UserApi from "../network/api";
 import { useNavigate } from "react-router-dom";
+import ToggleBtn from "./ToggleBtn";
 
 const SerachBar = () => {
   const [query, setQuery] = useState<string>("");
@@ -32,40 +33,12 @@ const SerachBar = () => {
 
   return (
     <div className={styles.searchBar}>
-      <div
+      <ToggleBtn
         onClick={triggerToggle}
-        className={`${styles.toggle} ${
-          isSpotifySearch ? styles.toggleChecked : ""
-        }`}
-      >
-        <div className={styles.toggleCont}>
-          <div className={styles.toggleCheck}>
-            <span>
-              <img
-                style={{ height: "25px", width: "25px" }}
-                src="../public/musicLogo.svg"
-                alt=""
-              />
-            </span>
-          </div>
-          <div className={styles.toggleUncheck}>
-            <span>
-              <img
-                style={{ height: "30px", width: "35px" }}
-                src="../public/profile.svg"
-                alt=""
-              />
-            </span>
-          </div>
-        </div>
-        <div className={styles.toggleCircle}></div>
-        <input
-          className={styles.toggleInput}
-          defaultChecked={isSpotifySearch}
-          type="checkbox"
-          aria-label="Toggle Button"
-        />
-      </div>
+        isToggleOn={isSpotifySearch}
+        img1={"../public/musicLogo.svg"}
+        img2={"../public/profile.svg"}
+      />
       <input
         type="serach"
         name="search-form"

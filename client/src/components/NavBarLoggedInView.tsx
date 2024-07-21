@@ -30,7 +30,7 @@ const NavBarLoggedInView = ({
       <div
         style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}
       >
-        <NavLink to={"/api/profile"}>
+        <NavLink to={"/profile"}>
           <img className={styles.logos} src="../public/profile.svg" alt="" />
         </NavLink>
         <p>{user}</p>

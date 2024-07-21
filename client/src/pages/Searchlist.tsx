@@ -9,8 +9,8 @@ import SongPlayer from "../components/SongPlayer";
 const Searchlist = () => {
   const { state } = useLocation();
   const tracks: Track[] = state.track;
-  const [likedSongs, setLikedSongs] = useState<string[]>([]);
   const [trackId, setTrackId] = useState<string | null>(null);
+  const [likedSongs, setLikedSongs] = useState<string[]>([]);
 
   async function getLikedSongs() {
     try {

@@ -1,0 +1,23 @@
+@import url("../../index.css");
+
+.profilePage{
+    display: flex;
+    flex-direction: column;
+}
+.playlistView{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-height: 20vh;
+    overflow-y: scroll;
+    background-color: #1a1a1a;
+    background-image: linear-gradient(to bottom,hsl(0, 0%, 12%), hsl(0, 0%, 9%));
+}
+.addSongs{
+    display: flex;
+    justify-content: center;
+}
+.inputArea{
+    background-color: black;
+}

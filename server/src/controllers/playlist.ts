@@ -1,10 +1,10 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import PlaylistModel from "../models/playlist";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import UserModel from "../models/users";
 import env from "../utils/validateEnv";
+import UserModel from "../models/users";
 import * as CloudinaryController from "../utils/cloudinary";
 
 export const createPlaylist = async (

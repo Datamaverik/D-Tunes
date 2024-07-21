@@ -27,6 +27,8 @@ const Login = ({ onSuccessfulLogin }: LoginPageProps) => {
         console.log(user);
       }
     } catch (er) {
+      console.log(er);
+      
       if (er instanceof AxiosError) showToast(er.message, "warning");
     }
   }
