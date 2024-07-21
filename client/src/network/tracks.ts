@@ -64,6 +64,18 @@ export const getTrackByUser = async (userId: string) => {
     const response = await api.get(`/api/tracks/tracksByUser/${userId}`);
     return response.data;
   } catch (er) {
-    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
+    if (er instanceof AxiosError) throw new Error(er.message);
+  }
+};
+
+export const getSearchedTracks = async (query: string) => {
+  try {
+    const response = await api.get("/api/tracks/search", {
+      params: { q: query },
+    });
+    return response.data;
+  } catch (er) {
+    console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.message);
   }
 };

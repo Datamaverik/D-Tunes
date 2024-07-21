@@ -12,8 +12,10 @@ router.delete("/delete/:trackId", trackController.removeTrack);
 
 router.get("/allPublished/:artistId", trackController.getPublishedTracks);
 
-router.get("/published/:trackId",trackController.getTrackByID)
+router.get("/published/:trackId", trackController.getTrackByID);
 
-router.get("/tracksByUser/:userId",trackController.getTracksByUser);
+router.get("/tracksByUser/:userId", trackController.getTracksByUser);
+
+router.get("/search", trackController.getTracksByName);
 
 export default router;

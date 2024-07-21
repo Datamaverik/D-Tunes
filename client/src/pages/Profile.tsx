@@ -46,7 +46,7 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
   // const [currentUser, setCurrentUser] = useState<FetchedUser | null>(null);
-  const [duration, setDuration] = useState<number>(0);
+  const [duration_ms, setDuration] = useState<number>(0);
   const [tracks, setTracks] = useState<fetchedTrack[]>([]);
   const [trackId, setTrackId] = useState<string>("");
   // const [showLikedSongs, setShowLikedSongs] = useState<boolean>(false);
@@ -67,15 +67,27 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
   const onSubmit = async (credentials: songInput) => {
     dialogRef.current?.close();
     try {
-      const audio = document.createElement("audio");
-      audio.src = credentials.song[0].webkitRelativePath;
-      audio.addEventListener('loadedmetadata',()=>{
-        setDuration(audio.duration);
-      })
-      console.log(duration);
+      const reader = new FileReader();
+      console.log(reader);
+
+      reader.onload = (e) => {
+        if (e.target && e.target.result) {
+          const audioContext = new window.AudioContext();
+          const arrayBuffer = e.target.result as ArrayBuffer;
+          audioContext.decodeAudioData(arrayBuffer, (buffer) => {
+            const duration = buffer.duration;
+            setDuration(Math.floor(duration * 1000));
+          });
+          reader.readAsArrayBuffer(credentials.song[0]);
+        } else {
+          console.error("Failed to read the audio file");
+          showToast("Failed to read the audion file", "failure");
+        }
+      };
+      console.log(duration_ms);
       const trackInput: trackApi.trackInput = {
         name: credentials.name,
-        duration_ms: duration.toString(),
+        duration_ms: duration_ms.toString(),
         image: credentials.image[0],
         song: credentials.song[0],
         genre: credentials.genre,
@@ -216,7 +228,9 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
         {isArtist && (
           <>
             <div style={{ position: "relative" }}>
-              <p style={{marginLeft:'50%',transform:'translateX(-25%)'}}>Published Tracks</p>
+              <p style={{ marginLeft: "50%", transform: "translateX(-25%)" }}>
+                Published Tracks
+              </p>
               <div className={styles.playlistView}>
                 {tracks &&
                   tracks.map((track, index) => (
@@ -225,8 +239,6 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
                       isLiked={likedSongs.includes(track.id)}
                       onClick={() => {
                         setTrackId(track.id);
-                        console.log(track.id);
-                        console.log(tracks);
                       }}
                       key={index}
                       name={track.name}

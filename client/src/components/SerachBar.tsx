@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "../components/styles/form.module.css";
-// import { User } from "../models/User";
+import * as TracksApi from "../network/tracks";
 import * as SpotifyApi from "../network/spotify";
 import * as UserApi from "../network/api";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +20,12 @@ const SerachBar = () => {
     try {
       if (isSpotifySearch) {
         const response = await SpotifyApi.getSerchedSongs(query);
-        navigate(`/serachlist`, { state: { track: response } });
+        const response2 = await TracksApi.getSearchedTracks(query);
+        const tracks = [...response2,...response];
+        console.log(tracks);
+        navigate(`/serachlist`, {
+          state: { track: tracks},
+        });
       } else {
         const response = await UserApi.getSearchedUsers(query);
         // setUsers(response);

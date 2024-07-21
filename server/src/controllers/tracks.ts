@@ -127,3 +127,15 @@ export const getTracksByUser: RequestHandler = async (req, res, next) => {
     next(er);
   }
 };
+
+export const getTracksByName: RequestHandler = async (req, res, next) => {
+  const query = req.query.q as string;
+  if (!query) throw createHttpError(400, "query not provided");
+
+  try {
+    const tracks = await TrackModel.find({ name: new RegExp(query, "i") });
+    res.status(200).json(tracks);
+  } catch (er) {
+    next(er);
+  }
+};
