@@ -43,7 +43,7 @@ const Playlist = () => {
   }, [id]);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div className={styles.trackCont} style={{ position: "relative" }}>
       <div className={styles.playlistView}>
         {tracks &&
           tracks.map((track, index) => (
@@ -55,6 +55,7 @@ const Playlist = () => {
               }}
               key={index}
               name={track.track.name}
+              duration={track.track.duration_ms}
               icon={track.track.album.images[0]}
             />
           ))}

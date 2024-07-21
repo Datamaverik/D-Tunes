@@ -68,23 +68,23 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
     dialogRef.current?.close();
     try {
       const reader = new FileReader();
-      console.log(reader);
 
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         if (e.target && e.target.result) {
           const audioContext = new window.AudioContext();
           const arrayBuffer = e.target.result as ArrayBuffer;
-          audioContext.decodeAudioData(arrayBuffer, (buffer) => {
+          await audioContext.decodeAudioData(arrayBuffer, (buffer) => {
             const duration = buffer.duration;
             setDuration(Math.floor(duration * 1000));
           });
-          reader.readAsArrayBuffer(credentials.song[0]);
         } else {
           console.error("Failed to read the audio file");
           showToast("Failed to read the audion file", "failure");
         }
       };
+      reader.readAsArrayBuffer(credentials.song[0]);
       console.log(duration_ms);
+
       const trackInput: trackApi.trackInput = {
         name: credentials.name,
         duration_ms: duration_ms.toString(),
@@ -235,6 +235,7 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
                 {tracks &&
                   tracks.map((track, index) => (
                     <PlaylistView
+                      duration={track.duration_ms}
                       songId={track.id}
                       isLiked={likedSongs.includes(track.id)}
                       onClick={() => {

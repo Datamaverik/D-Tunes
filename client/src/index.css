@@ -15,7 +15,7 @@
 :root {
   --background-color: #141414;
   --foreground-color: #87bcb6;
-  --foregound-neg: #212b2b;
+  --foregound-neg: #1c1e1e;
   --foregound-pos: #486860;
   --header: #00765c;
   --text-color: #e2e2e2;
@@ -30,6 +30,7 @@ body {
   font-family: Nunito Verdana, Geneva, Tahoma, sans-serif;
   font-size: 1.2rem;
   position: relative;
+  overflow-y: hidden;
 }
 
 button {

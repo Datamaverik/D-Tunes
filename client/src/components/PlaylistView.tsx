@@ -9,6 +9,7 @@ interface PlaylistViewProps {
   onClick: () => void;
   isLiked: boolean;
   songId: string;
+  duration: number;
 }
 
 const PlaylistView = ({
@@ -17,10 +18,25 @@ const PlaylistView = ({
   onClick,
   isLiked,
   songId,
+  duration,
 }: PlaylistViewProps) => {
   const [imgSrc, setImgSrc] = useState<string>(
     isLiked ? "../public/liked.svg" : "../public/notLiked.svg"
   );
+
+  const formatTime = (dur: number) => {
+    let seconds = Math.floor(dur / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 1000);
+    seconds = Math.floor(seconds % 60);
+    const paddedSec = seconds.toString().padStart(2,'0');
+    const paddedMin = minutes.toString().padStart(2,'0');
+    return hours
+      ? `${hours}:${paddedMin}:${paddedSec}`
+      : minutes
+      ? `${minutes}:${paddedSec}`
+      : `${paddedSec}`;
+  };
 
   async function handleClick(id: string) {
     const songObj = {
@@ -59,13 +75,16 @@ const PlaylistView = ({
       ></div>
       <div className={styles.songName}>
         <p onClick={onClick}>{name}</p>
-        <img
-          className={styles.likeLogo}
-          id={`likeLogo-${songId}`} // Use a unique id
-          onClick={() => handleClick(songId)}
-          src={imgSrc}
-          alt=""
-        />
+        <div style={{ display: "flex", gap: "1rem" }}>
+          <img
+            className={styles.likeLogo}
+            id={`likeLogo-${songId}`} // Use a unique id
+            onClick={() => handleClick(songId)}
+            src={imgSrc}
+            alt=""
+          />
+          <p className={styles.duration}>{formatTime(duration)}</p>
+        </div>
       </div>
     </div>
   );

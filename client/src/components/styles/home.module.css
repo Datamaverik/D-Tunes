@@ -5,6 +5,8 @@
   padding: 1rem;
   grid-template-columns: 30% 70%;
   margin-top: 100px;
+  height: 84vh;
+  overflow-y: hidden;
 }
 
 .sideBar {

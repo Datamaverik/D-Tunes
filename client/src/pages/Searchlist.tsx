@@ -26,11 +26,12 @@ const Searchlist = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
   return (
-    <div style={{ position: "relative" }}>
+    <div className={styles.trackCont} style={{ position: "relative" }}>
       <div className={styles.playlistView}>
         {tracks &&
           tracks.map((track, index) => (
             <PlaylistView
+            duration={track.duration_ms}
               songId={track.id}
               isLiked={likedSongs.includes(track.id)}
               onClick={() => {

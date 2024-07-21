@@ -5,10 +5,13 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  background-color: rgba(0, 8, 8, 0.4);
+  margin-left: -1rem;
+  background-color: hsl(0, 0%, 6%);
   margin-right: 1rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
+  height: 77vh;
+  backdrop-filter: blur(3px);
 }
 
 .playlistCont {
@@ -20,12 +23,12 @@
   padding-top: 5px;
   padding-bottom: 5px;
   transition: all 0.3s ease-in-out;
-  background-color: rgba(43, 43, 43, 0.377);
+  background-color: hsl(0, 0%, 8%);
   justify-content: space-between;
 }
 .playlistCont:hover {
   cursor: pointer;
-  background-color: rgba(82, 82, 82, 0.428);
+  background-color: hsl(0, 0%, 12%);
 }
 .playlistImg {
   height: 60px;
@@ -41,10 +44,10 @@
   font-size: 1rem;
   color: gray;
 }
-.iconBtn{
+.iconBtn {
   background-color: transparent;
 }
-.iconBtn:hover{
+.iconBtn:hover {
   cursor: pointer;
   background-color: transparent;
   filter: drop-shadow(0px 0px 3px white);
@@ -59,24 +62,30 @@
   border-radius: 10px;
 }
 
-.dialogCont::backdrop{
-    background-color: rgba(0, 0, 0, 0.5);
+.dialogCont::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
 }
-.checkboxCont{
-    display: flex;
-    align-items: center;
-    margin-top: -5px;
-    margin-bottom: 1rem;
+.checkboxCont {
+  display: flex;
+  align-items: center;
+  margin-top: -5px;
+  margin-bottom: 1rem;
 }
-.formGroup{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.closeBtn{
-    margin-left: 92%;
+.closeBtn {
+  margin-left: 92%;
 }
-.btnCont{
+.btnCont {
   display: flex;
   gap: 1rem;
+}
+@media (max-width: 768px) {
+  .sideBarCont {
+    height: auto;
+    background-color: hsla(0, 0%, 6%, 0.541);
+  }
 }
