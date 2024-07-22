@@ -16,7 +16,7 @@ export const getLoggedInUser = async () => {
     return response.data;
   } catch (er) {
     console.error(er);
-    if (er instanceof AxiosError) throw new Error(er.message);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
   }
 };
 
@@ -33,7 +33,7 @@ export const signUp = async (credentials: signUpCredentials) => {
     return response.data;
   } catch (er) {
     console.error(er);
-    if (er instanceof AxiosError) throw new Error(er.message);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
   }
 };
 
@@ -48,7 +48,7 @@ export const login = async (credentials: loginCredentials) => {
     return response.data;
   } catch (er) {
     console.error(er);
-    if (er instanceof AxiosError) throw new Error(er.message);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
   }
 };
 
@@ -58,7 +58,7 @@ export const logout = async () => {
     return response.data;
   } catch (er) {
     console.error(er);
-    if (er instanceof AxiosError) throw new Error(er.message);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
   }
 };
 
@@ -68,7 +68,7 @@ export const getLikedSongs = async () => {
     return response.data;
   } catch (er) {
     console.error(er);
-    if (er instanceof AxiosError) throw new Error(er.message);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
   }
 };
 
@@ -81,17 +81,33 @@ export const toggleLike = async (songId: songIdObj) => {
     return response.data;
   } catch (er) {
     console.error(er);
-    if (er instanceof AxiosError) throw new Error(er.message);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
   }
 };
 interface updateBody {
   email?: string;
   isArtist?: boolean;
   passwordRaw?: string;
+  image?: File;
 }
+// const response = await axios.post(`${baseURL}/api/tracks/`, songCredential, {
+//   withCredentials: true,
+//   headers: {
+//     "Content-Type": "multipart/form-data",
+//   },
+// });
 export const updateUser = async (userId: string, credentials: updateBody) => {
   try {
-    const response = await api.post(`/api/users/update/${userId}`, credentials);
+    const response = await axios.post(
+      `${baseURL}/api/users/update/${userId}`,
+      credentials,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return response.data;
   } catch (er) {
     console.error(er);

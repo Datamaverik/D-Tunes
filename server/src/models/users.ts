@@ -20,6 +20,11 @@ const UserSchema = new Schema({
   isArtist: { type: Boolean, default: false },
   published_songs: { type: [Schema.Types.ObjectId], default: [] },
   followers: { type: Number, default: 0 },
+  profileImgURL: {
+    type: String,
+    default: "https://i.ibb.co/WnTMDjS/default-Pfp.jpg",
+  },
+  public_id: { type: String, default: "" },
 });
 
 type User = InferSchemaType<typeof UserSchema>;

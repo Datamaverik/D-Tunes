@@ -43,9 +43,8 @@ const Sidebar = () => {
       if (credentials.images && credentials.images.length > 0) {
         formData.append("image", credentials.images[0]);
       }
-
+      
       const newPlaylist = await playlistApi.createPlaylist(formData);
-      console.log(formData);
       console.log("credentials sent from sidebar");
 
       setPlaylists([...playlists, newPlaylist]);

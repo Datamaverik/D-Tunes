@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import styles from "../components/styles/profile.module.css";
 import styles2 from "../components/styles/Sidebar.module.css";
 import styles3 from "../components/styles/form.module.css";
@@ -18,6 +18,8 @@ export interface FetchedUser {
   email: string;
   isArtist: boolean;
   password: string;
+  profileImgURL: string;
+  public_id: string;
 }
 
 interface ProfileProps {
@@ -44,6 +46,10 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
   } = useForm<songInput>();
 
   const dialogRef = useRef<HTMLDialogElement | null>(null);
+  const pfpDialogRef = useRef<HTMLDialogElement | null>(null);
+  const pfpSubBtnRef = useRef<HTMLButtonElement | null>(null);
+  const pfpFileRef = useRef<HTMLInputElement | null>(null);
+  const pfpEmailRef = useRef<HTMLInputElement | null>(null);
 
   // const [currentUser, setCurrentUser] = useState<FetchedUser | null>(null);
   const [duration_ms, setDuration] = useState<number>(0);
@@ -130,6 +136,27 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
     }
   };
 
+  const pfpSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      if (pfpFileRef.current?.files) {
+        const credentials = {
+          image: pfpFileRef.current?.files[0],
+          email: pfpEmailRef.current?.value,
+          isArtist: user?.isArtist,
+        };
+        const updatedUser = await UserApi.updateUser(
+          user ? user._id : "",
+          credentials
+        );
+        console.log(updatedUser);
+      }
+    } catch (er) {
+      console.error(er);
+      if (er instanceof Error) showToast(er.message, "failure");
+    }
+  };
+
   useEffect(() => {
     getLikedSongs();
     getPublishedTracks();
@@ -137,7 +164,7 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
   }, []);
 
   return (
-    <>
+    <div className={styles.majorCont}>
       <dialog ref={dialogRef} className={styles2.dialogCont}>
         <button
           className={styles2.closeBtn}
@@ -215,7 +242,63 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
       </dialog>
       <div className={styles.profilePage}>
         <div className={styles.profileSec}>
-          Profile Image
+          <div className={styles.pfpCont}>
+            <div className={styles.profileImg}>
+              <img
+                className={styles.pfpImg}
+                src={user?.profileImgURL}
+                alt="Profile Image"
+                onClick={() => {
+                  pfpDialogRef.current?.showModal();
+                }}
+              />
+              <dialog className={styles2.dialogCont} ref={pfpDialogRef}>
+                <button
+                  className={styles2.closeBtn}
+                  onClick={() => {
+                    pfpDialogRef.current?.close();
+                  }}
+                >
+                  X
+                </button>
+                <form
+                  action="post"
+                  encType="multipart/form-data"
+                  className={styles2.formGroup}
+                  onSubmit={pfpSubmit}
+                >
+                  <div className={styles3.textGroup}>
+                    <label className={styles3.formLabel} htmlFor="image">
+                      Chose a profile image
+                    </label>
+                    <input
+                      className={`${styles3.inputArea}`}
+                      ref={pfpFileRef}
+                      type="file"
+                      name="image"
+                    />
+                  </div>
+                  <div className={styles3.textGroup}>
+                    <label className={styles3.formLabel} htmlFor="username">
+                      Change Email
+                    </label>
+                    <input
+                      ref={pfpEmailRef}
+                      type="text"
+                      name="email"
+                      placeholder="Change Email"
+                      className={`${styles3.inputArea}`}
+                    />
+                  </div>
+                  <button ref={pfpSubBtnRef}>Submit</button>
+                </form>
+              </dialog>
+            </div>
+            <div className={styles.userName}>
+              <p style={{ marginBottom: "-20px" }}>Profile</p>
+              {user?.username}
+            </div>
+          </div>
           {!user?.isArtist && (
             <button className={styles.upgradeBtn} onClick={handleClick}>
               Upgrade to Artist
@@ -226,7 +309,7 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
         <div className={styles.topTrackSec}>Top tracks</div>
         <div className={styles.friendsSection}>Friends</div>
         {isArtist && (
-          <>
+          <div>
             <div style={{ position: "relative" }}>
               <p style={{ marginLeft: "50%", transform: "translateX(-25%)" }}>
                 Published Tracks
@@ -252,10 +335,10 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
             <div className={styles.addSongs}>
               <button onClick={handleAdd}>Publish Track</button>
             </div>
-          </>
+          </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
