@@ -43,9 +43,15 @@
   display: flex;
   align-items: center;
 }
-.profileImg img:hover {
+.profileImg img:hover{
   cursor: pointer;
-  filter: blur(3px);
+  filter: blur(2px);
+}
+.pfpImgCont{
+  text-align: center;
+}
+.pfpImgCont:hover .pfpText{
+  visibility: visible;
 }
 .profileImg img {
   height: 10rem;
@@ -66,4 +72,7 @@
     justify-content: center;
     align-items: center;
     gap: 1rem;
+}
+.pfpText{
+  visibility: hidden;
 }

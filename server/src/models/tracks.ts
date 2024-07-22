@@ -1,5 +1,4 @@
 import { InferSchemaType, Schema, model } from "mongoose";
-import { deflate } from "zlib";
 
 const IconSchema = new Schema({
   height: { type: Number, default: 60 },

@@ -6,7 +6,7 @@ import sendCookie from "../utils/saveCookie";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import env from "../utils/validateEnv";
-import * as CloudinaryController from '../utils/cloudinary';
+import * as CloudinaryController from "../utils/cloudinary";
 
 interface SignUpBody {
   username?: string;
@@ -72,25 +72,27 @@ export const updateUser: RequestHandler = async (req, res, next) => {
     let passwordHashed: string | null = null;
     if (passwordRaw) passwordHashed = await bcrypt.hash(passwordRaw, 10);
 
-    let defaultImgURL: string = "https://i.ibb.co/WnTMDjS/default-Pfp.jpg";
-    let imgPublicId:string = '';
+    let defaultImgURL: string = "";
+    let imgPublicId: string = "";
     console.log(req.file);
-    if(req.file){
-      const response = await CloudinaryController.uploadOnCloudinary(req.file.path);
-      if(response){
+    if (req.file) {
+      const response = await CloudinaryController.uploadOnCloudinary(
+        req.file.path
+      );
+      if (response) {
         defaultImgURL = response.url;
         imgPublicId = response.public_id;
       }
     }
     let updatedUser = await UserModel.findById(userId).exec();
     if (updatedUser) {
-      if(updatedUser.public_id){
+      if (updatedUser.public_id) {
         await CloudinaryController.deleteFromCloudinary(updatedUser.public_id);
       }
       if (email) updatedUser.email = email;
       if (passwordHashed) updatedUser.password = passwordHashed;
       updatedUser.isArtist = isArtist;
-      updatedUser.profileImgURL = defaultImgURL;
+      if (defaultImgURL !== "") updatedUser.profileImgURL = defaultImgURL;
       updatedUser.public_id = imgPublicId;
       await updatedUser.save();
       return res.status(200).json(updatedUser);

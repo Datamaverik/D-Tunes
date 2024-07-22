@@ -65,11 +65,19 @@
   display: flex;
   transition: all 0.3s ease-in-out;
   padding: 5px;
-  background-image: linear-gradient(to bottom, hsl(0, 0%, 10%), hsl(0, 0%, 8.5%));
+  background-image: linear-gradient(
+    to bottom,
+    hsl(0, 0%, 10%),
+    hsl(0, 0%, 8.5%)
+  );
 }
 .songCont:hover {
   cursor: pointer;
-  background-image: linear-gradient(to bottom, hsl(0, 0%, 18%), hsl(0, 0%, 15%));
+  background-image: linear-gradient(
+    to bottom,
+    hsl(0, 0%, 18%),
+    hsl(0, 0%, 15%)
+  );
   backdrop-filter: blur(2px);
 }
 .songImgCont {
@@ -117,6 +125,7 @@
 }
 .addBtn {
   margin-left: 1rem;
+  margin-right: 1rem;
   background-color: transparent;
 }
 .addBtn:hover {
@@ -133,19 +142,37 @@
 .dropDown {
   background-color: rgba(80, 80, 80, 0.284);
   backdrop-filter: blur(5px);
+  padding: 5px;
   margin: 0px;
+  border-radius: 5px 5px 0px 0px;
+  text-align: center;
   width: 25%;
   margin-left: 60%;
-  padding: 5px;
-  border-radius: 5px 5px 0px 0px;
   right: 0px;
-  text-align: center;
   transition: all 0.3s ease-in-out;
 }
 .dropDownItems {
   text-decoration: none;
   padding: 5px;
   transition: all 0.3s ease-in-out;
+}
+.lyrics {
+  text-decoration: none;
+  padding: 10px;
+  font-size: large;
+}
+.lyricsCont{
+  background-color: rgba(31, 31, 31, 0.774);
+  backdrop-filter: blur(5px);
+  padding: 10px;
+  margin: 0px;
+  border-radius: 5px 5px 0px 0px;
+  text-align: center;
+  width: 80%;
+  margin-left: 6%;
+  height: 60vh;
+  overflow-y: scroll;
+
 }
 .dropDownItems:hover {
   transform: scale(1.2);

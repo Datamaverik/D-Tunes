@@ -20,6 +20,21 @@
   --header: #00765c;
   --text-color: #e2e2e2;
 }
+*{
+ scrollbar-width: thin;
+  scrollbar-color: var(--foregound-neg) var(--background-color);
+}
+*::-webkit-scrollbar{
+  width: 12px;
+}
+*::-webkit-scrollbar-track{
+  background-color: var(--background-color);
+}
+*::-webkit-scrollbar-thumb{
+  background-color: var(--foregound-neg);
+  border-radius: 5px;
+  border: 3px solid var(--background-color);
+}
 
 body {
   margin: 0;

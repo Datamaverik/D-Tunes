@@ -138,6 +138,7 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
 
   const pfpSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    pfpDialogRef.current?.close();
     try {
       if (pfpFileRef.current?.files) {
         const credentials = {
@@ -158,6 +159,7 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
   };
 
   useEffect(() => {
+    console.log(user);
     getLikedSongs();
     getPublishedTracks();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -244,14 +246,17 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
         <div className={styles.profileSec}>
           <div className={styles.pfpCont}>
             <div className={styles.profileImg}>
-              <img
-                className={styles.pfpImg}
-                src={user?.profileImgURL}
-                alt="Profile Image"
-                onClick={() => {
-                  pfpDialogRef.current?.showModal();
-                }}
-              />
+              <div className={styles.pfpImgCont}>
+                <p className={styles.pfpText}>Change profile</p>
+                <img
+                  className={styles.pfpImg}
+                  src={user?.profileImgURL}
+                  alt="Profile Image"
+                  onClick={() => {
+                    pfpDialogRef.current?.showModal();
+                  }}
+                />
+              </div>
               <dialog className={styles2.dialogCont} ref={pfpDialogRef}>
                 <button
                   className={styles2.closeBtn}

@@ -13,7 +13,6 @@ interface TrackPlayerProps {
   songs: fetchedTrack[];
 }
 
-
 const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
   const audioElement = document.getElementById(
     "audio-preview"
@@ -23,9 +22,13 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
   const [currentTrack, setCurrentTrack] = useState<fetchedTrack>();
   const [showDropdown, setShowDropDown] = useState<boolean>(false);
   const [playlists, setPlaylists] = useState<fetchedPlaylistModel[]>([]);
+  const [lyrics, setLyrics] = useState<string[]>([""]);
+  const [showLyrics, setShowLyrics] = useState<boolean>(false);
   const { showToast } = useToast();
+
   const addBtn = useRef<HTMLButtonElement | null>(null);
   const dropDown = useRef<HTMLDivElement | null>(null);
+  const lyricsBtn = useRef<HTMLButtonElement | null>(null);
 
   async function getChosenTrack() {
     try {
@@ -51,6 +54,20 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
     }
   }
 
+  async function fetchLyrics(title: string, artist: string) {
+    try {
+      const lyrics = await TrackApi.getLyrics({
+        title,
+        artist,
+      });
+      console.log(lyrics);
+      const lines: string[] = lyrics.split("\n");
+      setLyrics(lines);
+    } catch (er) {
+      console.error(er);
+    }
+  }
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -65,6 +82,7 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
     getChosenTrack();
     setTracks(songs);
     fetchPlaylists();
+    setShowLyrics(false);
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -83,13 +101,14 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
   useEffect(() => {
     if (tracks.length > 0) {
       let track;
-      if(!id)return;
+      if (!id) return;
       if (isValidMongoObjectID(id)) {
         track = tracks.find((track) => track.id === id);
       } else {
         track = tracks.find((track) => track.id === id);
       }
       setCurrentTrack(track);
+      if (track) fetchLyrics(track.name, track.artists[0].name);
       if (track) {
         if (!track.preview_url) playNextSong(track);
         else setAudio(track.preview_url);
@@ -117,6 +136,7 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
     if (ind >= tracks.length) ind = 0;
     nextTrack = tracks[ind];
     setCurrentTrack(nextTrack);
+    fetchLyrics(nextTrack.name, nextTrack.artists[0].name);
     setAudio(nextTrack.preview_url);
   };
 
@@ -154,9 +174,29 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
           ))}
         </div>
       )}
+      {showLyrics && (
+        <div className={styles.lyricsCont}>
+          {lyrics.map((line, index) => (
+            <p key={index} className={styles.lyrics}>
+              {line}
+            </p>
+          ))}
+        </div>
+      )}
       <figure className={styles.playerCont}>
         <figcaption className={styles.caption}>{currentTrack?.name}</figcaption>
         <div className={styles.audioCont}>
+          <button
+            onClick={() => setShowLyrics(!showLyrics)}
+            ref={lyricsBtn}
+            className={styles.addBtn}
+          >
+            <img
+              className={styles.addImg}
+              src="../../public/lyrics.svg"
+              alt=""
+            />
+          </button>
           <audio
             className={styles.audioPreview}
             controls

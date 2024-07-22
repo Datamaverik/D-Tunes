@@ -1,8 +1,8 @@
 import axios from "axios";
 import env from "../utils/validateEnv";
-import tokenModel from "../models/spotify";
 import createHttpError from "http-errors";
 import { NextFunction, Request, Response } from "express";
+import tokenModel from "../models/spotify";
 
 const clientId = env.SPOTIFY_CLIENT_ID;
 const clientSecret = env.SPOTIFY_CLIENT_SECRET;
@@ -14,13 +14,6 @@ interface AccessToken {
   token_type: string;
   expires_in: number;
 }
-// interface RefreshToken {
-//   access_token: string;
-//   token_type: string;
-//   scope: string;
-//   expires_in: number;
-//   refresh_token: string;
-// }
 
 export let tokenExpiresAt: number | null = null;
 
