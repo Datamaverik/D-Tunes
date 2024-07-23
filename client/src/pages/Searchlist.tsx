@@ -31,6 +31,7 @@ const Searchlist = () => {
         {tracks &&
           tracks.map((track, index) => (
             <PlaylistView
+            artist={track.artists[0].name}
             duration={track.duration_ms}
               songId={track.id}
               isLiked={likedSongs.includes(track.id)}

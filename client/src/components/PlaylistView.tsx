@@ -10,6 +10,7 @@ interface PlaylistViewProps {
   isLiked: boolean;
   songId: string;
   duration: number;
+  artist: string;
 }
 
 const PlaylistView = ({
@@ -19,6 +20,7 @@ const PlaylistView = ({
   isLiked,
   songId,
   duration,
+  artist,
 }: PlaylistViewProps) => {
   const [imgSrc, setImgSrc] = useState<string>(
     isLiked ? "../public/liked.svg" : "../public/notLiked.svg"
@@ -29,8 +31,8 @@ const PlaylistView = ({
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 1000);
     seconds = Math.floor(seconds % 60);
-    const paddedSec = seconds.toString().padStart(2,'0');
-    const paddedMin = minutes.toString().padStart(2,'0');
+    const paddedSec = seconds.toString().padStart(2, "0");
+    const paddedMin = minutes.toString().padStart(2, "0");
     return hours
       ? `${hours}:${paddedMin}:${paddedSec}`
       : minutes
@@ -74,7 +76,10 @@ const PlaylistView = ({
         style={{ backgroundImage: `url(${icon.url})` }}
       ></div>
       <div className={styles.songName}>
-        <p onClick={onClick}>{name}</p>
+        <div>
+          <p onClick={onClick}>{name}</p>
+          <p className={styles.artistName}>{artist}</p>
+        </div>
         <div style={{ display: "flex", gap: "1rem" }}>
           <img
             className={styles.likeLogo}

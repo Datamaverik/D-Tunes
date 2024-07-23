@@ -51,6 +51,7 @@ export const saveTrack = async (
 
     const newPlaylist = await TrackModel.create({
       artist: user._id,
+      artists: [{ name: user.username }],
       name,
       preview_url: defaultSongURL,
       duration_ms,

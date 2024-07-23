@@ -19,9 +19,14 @@ const AlbumSchema = new Schema({
   },
 });
 
+const ArtistSchema = new Schema({
+  name: { type: String, required: true, minLength: 3, maxLength: 255 },
+});
+
 const TrackSchema = new Schema(
   {
     artist: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    artists: { type: [ArtistSchema] },
     name: {
       type: String,
       minLength: 3,

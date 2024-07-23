@@ -183,6 +183,11 @@
   font-weight: lighter;
   color: rgba(124, 124, 124, 0.894);
 }
+.artistName{
+  color: gray;
+  font-weight: lighter;
+  font-size: 1rem;
+}
 @media (max-width: 768px) {
   .genreCardCont {
     grid-template-columns: 1fr 1fr;

@@ -12,7 +12,7 @@ export const createPlaylist = async (
   res: Response,
   next: NextFunction
 ) => {
-  const name = req.body.name;
+  const name = req.body.name
   const isPublic = req.body.isPublic;
   const imageUrl = req.body.imageUrl;
   try {

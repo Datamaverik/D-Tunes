@@ -1,6 +1,8 @@
 import axios, { AxiosError } from "axios";
 
 const baseURL = "http://localhost:5000";
+const client_id = "HKEkBu-lR.2ZoPhz";
+const redirect_uri = "http://localhost:5000/api/users/authenticate";
 
 const api = axios.create({
   baseURL,
@@ -90,12 +92,7 @@ interface updateBody {
   passwordRaw?: string;
   image?: File;
 }
-// const response = await axios.post(`${baseURL}/api/tracks/`, songCredential, {
-//   withCredentials: true,
-//   headers: {
-//     "Content-Type": "multipart/form-data",
-//   },
-// });
+
 export const updateUser = async (userId: string, credentials: updateBody) => {
   try {
     const response = await axios.post(
@@ -130,6 +127,26 @@ export const getSearchedUsers = async (query: string) => {
 export const deleteUser = async (userId: string) => {
   try {
     const response = await api.delete(`/api/users/delete/${userId}`);
+    return response.data;
+  } catch (er) {
+    console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.message);
+  }
+};
+
+export const authenticate = async () => {
+  try {
+    const response = await axios.get("https://auth.delta.nitt.edu/authorize", {
+      params: {
+        client_id,
+        redirect_uri,
+        resoponse_type: "code",
+        grant_type: "authorization_code",
+        state: "qm2a@g5!ap&5#b",
+        scope: "email+openid+profile+user",
+        nonce: "qm2a@g5!ap&5#b",
+      },
+    });
     return response.data;
   } catch (er) {
     console.error(er);

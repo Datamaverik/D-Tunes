@@ -48,6 +48,7 @@ const Playlist = () => {
         {tracks &&
           tracks.map((track, index) => (
             <PlaylistView
+            artist={track.track.artists[0].name}
               songId={track.track.id}
               isLiked={likedSongs.includes(track.track.id)}
               onClick={() => {

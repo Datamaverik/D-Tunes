@@ -52,7 +52,6 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
   const pfpEmailRef = useRef<HTMLInputElement | null>(null);
 
   // const [currentUser, setCurrentUser] = useState<FetchedUser | null>(null);
-  const [duration_ms, setDuration] = useState<number>(0);
   const [tracks, setTracks] = useState<fetchedTrack[]>([]);
   const [trackId, setTrackId] = useState<string>("");
   // const [showLikedSongs, setShowLikedSongs] = useState<boolean>(false);
@@ -74,14 +73,26 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
     dialogRef.current?.close();
     try {
       const reader = new FileReader();
-
+      let duration_ms: number = 0;
       reader.onload = async (e) => {
         if (e.target && e.target.result) {
           const audioContext = new window.AudioContext();
           const arrayBuffer = e.target.result as ArrayBuffer;
-          await audioContext.decodeAudioData(arrayBuffer, (buffer) => {
+          await audioContext.decodeAudioData(arrayBuffer, async (buffer) => {
             const duration = buffer.duration;
-            setDuration(Math.floor(duration * 1000));
+            duration_ms = Math.floor(duration * 1000);
+
+            const trackInput: trackApi.trackInput = {
+              name: credentials.name,
+              duration_ms: duration_ms.toString(),
+              image: credentials.image[0],
+              song: credentials.song[0],
+              genre: credentials.genre,
+            };
+            console.log(trackInput);
+            const savedTrack = await trackApi.saveTrack(trackInput);
+            console.log(savedTrack);
+            showToast("Track uploaded successfully", "success");
           });
         } else {
           console.error("Failed to read the audio file");
@@ -89,19 +100,6 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
         }
       };
       reader.readAsArrayBuffer(credentials.song[0]);
-      console.log(duration_ms);
-
-      const trackInput: trackApi.trackInput = {
-        name: credentials.name,
-        duration_ms: duration_ms.toString(),
-        image: credentials.image[0],
-        song: credentials.song[0],
-        genre: credentials.genre,
-      };
-      console.log(trackInput);
-      const savedTrack = await trackApi.saveTrack(trackInput);
-      console.log(savedTrack);
-      showToast("Track uploaded successfully", "success");
       getPublishedTracks();
     } catch (er) {
       console.error(er);
@@ -323,6 +321,7 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
                 {tracks &&
                   tracks.map((track, index) => (
                     <PlaylistView
+                      artist={track.artists[0].name}
                       duration={track.duration_ms}
                       songId={track.id}
                       isLiked={likedSongs.includes(track.id)}

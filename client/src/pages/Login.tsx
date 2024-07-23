@@ -2,7 +2,7 @@ import { useForm, FieldError } from "react-hook-form";
 import TextInputField from "../components/form/TextInputField";
 import styles from "../components/styles/form.module.css";
 import * as UserApi from "../network/api";
-import { AxiosError } from "axios";
+// import { AxiosError } from "axios";
 import useToast from "../CustomHooks/Toast.hook";
 
 interface LoginPageProps {
@@ -26,17 +26,48 @@ const Login = ({ onSuccessfulLogin }: LoginPageProps) => {
         showToast("Logged in successfully", "success");
         console.log(user);
       }
-    } catch (er) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (er: any) {
       console.log(er);
-      
-      if (er instanceof AxiosError) showToast(er.message, "warning");
+      showToast(er.message, "warning");
     }
+  }
+  // const state = generateSecureRandomString(32);
+  // const nonce = generateSecureRandomString(32);
+  // const authUrl = new URL("https://auth.delta.nitt.edu/authorize");
+  // authUrl.searchParams.append("client_id", "aDGjBgG1bapKnzrM");
+  // authUrl.searchParams.append("redirect_uri", "http://localhost:5000/home");
+  // authUrl.searchParams.append("grant_type", "authorization_code");
+  // authUrl.searchParams.append("state", state);
+  // authUrl.searchParams.append("scope", "email openid profile user");
+  // authUrl.searchParams.append("nonce", nonce);
+  // authUrl.searchParams.append("response_type", "code");
+  // localStorage.setItem("authState", state);
+  // localStorage.setItem("authNonce", nonce);
+
+  function handleDAuth() {
+    const authUrl = new URL("https://auth.delta.nitt.edu/authorize");
+    authUrl.searchParams.append("client_id", "HKEkBu-lR.2ZoPhz");
+    authUrl.searchParams.append(
+      "redirect_uri",
+      "http://localhost:5000/api/users/authenticate"
+    );
+    authUrl.searchParams.append("grant_type", "authorization_code");
+    authUrl.searchParams.append("state", "qm2a@g5!ap&5#b");
+    authUrl.searchParams.append("scope", "email openid profile user");
+    authUrl.searchParams.append("nonce", "qm2a@g5!ap&5#b");
+    authUrl.searchParams.append("response_type", "code");
+
+    console.log(authUrl);
+
+    window.location.href = authUrl.toString();
   }
 
   return (
     <div className={styles.loginCont}>
       <div className={styles.banner}></div>
       <div className={styles.formCont}>
+        <button onClick={handleDAuth}>Log in with DAuth</button>
         <form
           action="post"
           className={styles.formGroup}
@@ -68,6 +99,7 @@ const Login = ({ onSuccessfulLogin }: LoginPageProps) => {
             }}
             error={errors.password as FieldError}
           />
+
           <button type="submit" className={styles.signUpBtn}>
             Log In
           </button>

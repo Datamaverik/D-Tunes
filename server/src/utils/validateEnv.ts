@@ -18,4 +18,6 @@ export default cleanEnv(process.env, {
   CLOUDINARY_SECRET: str(),
   CLOUD_NAME: str(),
   GENIUS_ACCESS_TOKEN: str(),
+  DATUTH_CLIENT_ID: str(),
+  DAUTH_CLIENT_SECRET: str(),
 });
