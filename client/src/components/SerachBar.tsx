@@ -30,7 +30,6 @@ const SerachBar = () => {
       } else {
         const response = await UserApi.getSearchedUsers(query);
         const currentUser = await UserApi.getLoggedInUser();
-        console.log(currentUser);
         navigate(`/userlist`, {
           state: {
             users: response.filter(

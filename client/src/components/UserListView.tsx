@@ -4,6 +4,7 @@ import * as UserApi from "../network/api";
 import * as FriendApi from "../network/friends";
 import { FetchedUser } from "../pages/Profile";
 import useToast from "../CustomHooks/Toast.hook";
+import { useNavigate } from "react-router-dom";
 
 interface UserListViewProps {
   friendId: string;
@@ -16,6 +17,8 @@ const UserListView = ({ friendId, status, requested }: UserListViewProps) => {
   const [currentUser, setCurrentUser] = useState<FetchedUser | null>(null);
   const [Status, setStatus] = useState<number>(status);
   const [showRequested, setShowRequested] = useState<boolean>(requested);
+
+  const navigate = useNavigate();
 
   async function getFriend() {
     try {
@@ -76,6 +79,12 @@ const UserListView = ({ friendId, status, requested }: UserListViewProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, friendId, requested]);
 
+  const handleUserClick = (user: FetchedUser) => {
+    navigate(`/userProfile`, {
+      state: { user, currentUser, status, friendId, requested },
+    });
+  };
+
   if (showRequested && Status === 2)
     return (
       <div className={styles.songCont}>
@@ -84,13 +93,7 @@ const UserListView = ({ friendId, status, requested }: UserListViewProps) => {
           style={{ backgroundImage: `url(${friend?.profileImgURL})` }}
         ></div>
         <div className={styles.songName}>
-          <p
-            onClick={() => {
-              console.log(Status);
-            }}
-          >
-            {friend?.username}
-          </p>
+          <p onClick={() => handleUserClick(friend!)}>{friend?.username}</p>
           <div style={{ display: "flex", gap: "1rem" }}>
             <button onClick={() => handleClick(Status)}>Confirm</button>
             <button onClick={handleReject}>Delete</button>
@@ -106,13 +109,7 @@ const UserListView = ({ friendId, status, requested }: UserListViewProps) => {
           style={{ backgroundImage: `url(${friend?.profileImgURL})` }}
         ></div>
         <div className={styles.songName}>
-          <p
-            onClick={() => {
-              console.log(Status);
-            }}
-          >
-            {friend?.username}
-          </p>
+          <p onClick={() => handleUserClick(friend!)}>{friend?.username}</p>
           <div style={{ display: "flex", gap: "1rem" }}>
             <button onClick={() => handleClick(Status)}>
               {Status === 0

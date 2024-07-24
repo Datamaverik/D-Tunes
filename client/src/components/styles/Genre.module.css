@@ -188,6 +188,12 @@
   font-weight: lighter;
   font-size: 1rem;
 }
+.yourName{
+  font-size: 2rem;
+}
+.you{
+  color: gray;
+}
 @media (max-width: 768px) {
   .genreCardCont {
     grid-template-columns: 1fr 1fr;

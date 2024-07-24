@@ -18,6 +18,7 @@ import UserTracks from "./pages/UserTracks";
 import ToastList from "./components/ToastList";
 import useToast from "./CustomHooks/Toast.hook";
 import UserList from "./pages/UserList";
+import UserProfile from "./components/UserProfile";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
@@ -122,6 +123,7 @@ function App() {
             <Route path="/playlist/:id" element={<Playlist />} />
             <Route path="/serachlist" element={<Searchlist />} />
             <Route path="/userlist" element={<UserList />} />
+            <Route path="/userProfile" element={<UserProfile />} />
             <Route path="/userTracks" element={<UserTracks />} />
             <Route
               path="profile"
