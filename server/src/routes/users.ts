@@ -20,6 +20,8 @@ router.get("/likedSongs", UserController.fetchLikedSongs);
 
 router.get("/search", UserController.searchUsers);
 
+router.get("/searchOne/:userId", UserController.getUserById);
+
 router.post(
   "/update/:userId",
   upload.single("image"),

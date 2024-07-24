@@ -22,6 +22,16 @@ export const getLoggedInUser = async () => {
   }
 };
 
+export const getUserById = async (userId: string) => {
+  try {
+    const response = await api.get(`/api/users/searchOne/${userId}`);
+    return response.data;
+  } catch (er) {
+    console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
+  }
+};
+
 export interface signUpCredentials {
   username: string;
   password: string;

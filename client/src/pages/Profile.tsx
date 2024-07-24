@@ -11,6 +11,7 @@ import TextInputField from "../components/form/TextInputField";
 import PlaylistView from "../components/PlaylistView";
 import SongPlayer from "../components/SongPlayer";
 import { Track } from "../models/SpotifyTrack";
+import FriendList from "./FriendList";
 
 export interface FetchedUser {
   _id: string;
@@ -54,6 +55,8 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
   // const [currentUser, setCurrentUser] = useState<FetchedUser | null>(null);
   const [tracks, setTracks] = useState<fetchedTrack[]>([]);
   const [trackId, setTrackId] = useState<string>("");
+  const [showFrinds, setShowFriends] = useState<boolean>(false);
+  const [showFrindReq, setShowFriendReq] = useState<boolean>(false);
   // const [showLikedSongs, setShowLikedSongs] = useState<boolean>(false);
 
   const { showToast } = useToast();
@@ -157,11 +160,11 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
   };
 
   useEffect(() => {
-    console.log(user);
+    // console.log(user);
     getLikedSongs();
     getPublishedTracks();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   return (
     <div className={styles.majorCont}>
@@ -298,7 +301,7 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
               </dialog>
             </div>
             <div className={styles.userName}>
-              <p style={{ marginBottom: "-20px" }}>Profile</p>
+              <p style={{ marginBottom: "-25px" }}>Profile</p>
               {user?.username}
             </div>
           </div>
@@ -308,9 +311,60 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
             </button>
           )}
         </div>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              width: "80vw",
+            }}
+          >
+            <button
+              className={styles.friendBtn}
+              onClick={() => {
+                setShowFriends(false);
+                setShowFriendReq(!showFrindReq);
+              }}
+            >
+              <img src="../public/requests.svg" />
+            </button>
+            {showFrindReq && (
+              <div className={styles.friendRequestSec}>
+                Pending Requests
+                <FriendList requested={true} user={user!} />
+              </div>
+            )}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              width: "80vw",
+            }}
+          >
+            <button
+              className={styles.friendBtn}
+              onClick={() => {
+                setShowFriends(!showFrinds);
+                setShowFriendReq(false);
+              }}
+            >
+              <img src="../public/friends.svg" />
+            </button>
+            {showFrinds && (
+              <div className={styles.friendSection}>
+                Friends
+                <FriendList requested={false} user={user!} />
+              </div>
+            )}
+          </div>
+        </div>
         <div className={styles.topAlbumSec}>Top albums</div>
         <div className={styles.topTrackSec}>Top tracks</div>
-        <div className={styles.friendsSection}>Friends</div>
+
         {isArtist && (
           <div>
             <div style={{ position: "relative" }}>

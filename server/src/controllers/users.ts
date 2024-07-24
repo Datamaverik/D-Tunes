@@ -8,7 +8,6 @@ import jwt from "jsonwebtoken";
 import env from "../utils/validateEnv";
 import * as CloudinaryController from "../utils/cloudinary";
 import axios from "axios";
-import qs from "qs";
 
 const client_id = env.DATUTH_CLIENT_ID;
 const client_secret = env.DAUTH_CLIENT_SECRET;
@@ -234,6 +233,17 @@ export const fetchLikedSongs = async (
     if (!user) throw createHttpError(404, "User not found");
 
     res.status(200).json(user.liked_songs);
+  } catch (er) {
+    next(er);
+  }
+};
+
+export const getUserById: RequestHandler = async (req, res, next) => {
+  const userId = req.params.userId;
+  try {
+    const user = await UserModel.findById(userId).exec();
+    if (user) return res.status(200).json(user);
+    else return res.status(404).json({ message: "user not found" });
   } catch (er) {
     next(er);
   }

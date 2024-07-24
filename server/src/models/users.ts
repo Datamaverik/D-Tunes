@@ -1,4 +1,5 @@
 import { InferSchemaType, Schema, model } from "mongoose";
+import FriendModel from "./friends";
 
 const UserSchema = new Schema({
   username: {
@@ -25,6 +26,24 @@ const UserSchema = new Schema({
     default: "https://i.ibb.co/WnTMDjS/default-Pfp.jpg",
   },
   public_id: { type: String, default: "" },
+  friends: {
+    type: [
+      {
+        requester: { type: Schema.Types.ObjectId, ref: "User" },
+        recipient: { type: Schema.Types.ObjectId, ref: "User" },
+        status: {
+          type: Number,
+          enums: [
+            0, //  add friend
+            1, //  requested
+            2, //  pending
+            3, //  friends
+          ],
+        },
+      },
+    ],
+    default: [],
+  },
 });
 
 type User = InferSchemaType<typeof UserSchema>;

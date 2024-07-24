@@ -4,10 +4,10 @@
   display: flex;
   flex-direction: column;
 }
-.majorCont{
-    overflow-y: scroll;
-    height: 75vh;
-    scrollbar-color: var(--background-color);
+.majorCont {
+  overflow-y: scroll;
+  height: 75vh;
+  scrollbar-color: var(--background-color);
 }
 .playlistView {
   display: flex;
@@ -29,8 +29,10 @@
   background-color: black;
 }
 .profileSec {
+  position: relative;
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   background-image: linear-gradient(to bottom, hsl(0, 0%, 18%), hsl(0, 0%, 9%));
   padding: 2rem 2rem 1rem 2rem;
   border-radius: 10px 10px 0px 0px;
@@ -38,19 +40,25 @@
 .userName {
   font-size: 6rem;
   font-weight: bolder;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1rem;
+  height: 23vh;
+  width: 100%;
 }
 .profileImg {
   display: flex;
   align-items: center;
 }
-.profileImg img:hover{
+.profileImg img:hover {
   cursor: pointer;
   filter: blur(2px);
 }
-.pfpImgCont{
+.pfpImgCont {
   text-align: center;
 }
-.pfpImgCont:hover .pfpText{
+.pfpImgCont:hover .pfpText {
   visibility: visible;
 }
 .profileImg img {
@@ -65,14 +73,64 @@
   display: flex;
   gap: 1rem;
   align-items: flex-end;
+  justify-content: space-between;
 }
-.pfpForm{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
+.pfpForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
-.pfpText{
+.pfpText {
   visibility: hidden;
+}
+.friendBtn img {
+  height: 40px;
+  width: 40px;
+}
+.friendBtn {
+  background-color: transparent;
+}
+.friendBtn img:hover {
+  filter: drop-shadow(0px 0px 3px white);
+}
+.friendBtn:hover {
+  background-color: transparent;
+}
+.friendSection {
+  width: 75vw;
+  text-align: end;
+}
+.friendRequestSec {
+  width: 75vw;
+  text-align: start;
+}
+.upgradeBtn {
+  background-color: transparent;
+  color: var(--text-color);
+  font-size: 1rem;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 70px;
+}
+.upgradeBtn:hover{
+  color: var(--header);
+  text-shadow: 0px 0px 3px black;
+  background-color:rgba(61, 61, 61, 0.74);
+}
+
+@media (max-width: 768px) {
+  .userName {
+    font-size: 3rem;
+    font-weight: bolder;
+  }
+  .profileImg img {
+    height: 7.5rem;
+    width: 7.5rem;
+  }
+  .upgradeBtn {
+    font-size: 1rem;
+  }
 }

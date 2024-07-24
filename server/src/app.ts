@@ -3,8 +3,9 @@ import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import UserRoutes from "./routes/users";
 import SongRoutes from "./routes/spotify";
-import TrackRoutes from './routes/tracks'
+import TrackRoutes from "./routes/tracks";
 import PlaylistRoutes from "./routes/playlist";
+import FriendRoutes from "./routes/friends";
 import cookieParser from "cookie-parser";
 import createHttpError, { isHttpError } from "http-errors";
 import env from "./utils/validateEnv";
@@ -24,7 +25,8 @@ app.use(morgan("dev"));
 app.use("/api/users", UserRoutes);
 app.use("/api/tracks", TrackRoutes);
 app.use("/api/songs", SongRoutes);
-app.use("/api/playlist",PlaylistRoutes);
+app.use("/api/friends", FriendRoutes);
+app.use("/api/playlist", PlaylistRoutes);
 
 //  for catching the unknown route calling errors
 app.use((req, res, next) => {

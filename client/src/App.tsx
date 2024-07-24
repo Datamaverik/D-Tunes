@@ -17,10 +17,11 @@ import Searchlist from "./pages/Searchlist";
 import UserTracks from "./pages/UserTracks";
 import ToastList from "./components/ToastList";
 import useToast from "./CustomHooks/Toast.hook";
+import UserList from "./pages/UserList";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
-  const[currentUser, setCurrentUser] = useState<FetchedUser | null>(null);
+  const [currentUser, setCurrentUser] = useState<FetchedUser | null>(null);
   const [isArtist, setIsArtist] = useState<boolean>(false);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const { toasts, removeToast } = useToast();
@@ -53,11 +54,13 @@ function App() {
   const handleSignup = (username: string) => {
     setLoggedInUser(username);
     navigate("/");
+    window.location.reload();
   };
 
   const handleLogin = (username: string) => {
     setLoggedInUser(username);
     navigate("/");
+    window.location.reload();
   };
 
   const handleLogout = () => {
@@ -118,8 +121,12 @@ function App() {
             />
             <Route path="/playlist/:id" element={<Playlist />} />
             <Route path="/serachlist" element={<Searchlist />} />
+            <Route path="/userlist" element={<UserList />} />
             <Route path="/userTracks" element={<UserTracks />} />
-            <Route path="profile" element={<Profile isArtist={isArtist} user={currentUser}/>} />
+            <Route
+              path="profile"
+              element={<Profile isArtist={isArtist} user={currentUser} />}
+            />
           </Route>
         </Route>
 
