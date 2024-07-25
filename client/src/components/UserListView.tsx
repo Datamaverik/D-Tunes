@@ -77,9 +77,10 @@ const UserListView = ({ friendId, status, requested }: UserListViewProps) => {
     setStatus(status);
     setShowRequested(requested);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, friendId, requested]);
+  }, [status, friendId, requested, status]);
 
   const handleUserClick = (user: FetchedUser) => {
+    console.log("clicked");
     navigate(`/userProfile`, {
       state: { user, currentUser, status, friendId, requested },
     });

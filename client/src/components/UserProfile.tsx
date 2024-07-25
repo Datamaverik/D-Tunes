@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "../components/styles/profile.module.css";
-import FriendList from "../pages/FriendList";
+// import FriendList from "../pages/FriendList";
 import { FetchedUser, fetchedTrack } from "../pages/Profile";
 import PlaylistView from "./PlaylistView";
 import SongPlayer from "./SongPlayer";
@@ -9,6 +9,7 @@ import * as trackApi from "../network/tracks";
 import * as UserApi from "../network/api";
 import useToast from "../CustomHooks/Toast.hook";
 import { useLocation } from "react-router-dom";
+import UsersFriendList from "./UsersFriendList";
 
 const UserProfile = () => {
   const { showToast } = useToast();
@@ -47,6 +48,20 @@ const UserProfile = () => {
     }
   }
 
+  const fetchAllData = async () => {
+    try {
+      await getPublishedTracks();
+      await getLikedSongs();
+      await getFriend();
+      setUser(state.user);
+      setCurrentUser(state.currentUser);
+      setStatus(state.status);
+      setShowRequested(state.requested);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   async function getLikedSongs() {
     try {
       const response = await UserApi.getLikedSongs();
@@ -61,7 +76,6 @@ const UserProfile = () => {
       if (currentUser && friend) {
         if (status === 0) {
           const res = await FriendApi.addFriendReq(currentUser._id, friend._id);
-          console.log(res);
           showToast(res.message, "success");
           setStatus(1);
         } else if (status === 2) {
@@ -69,13 +83,12 @@ const UserProfile = () => {
             currentUser._id,
             friend._id
           );
-          console.log(res);
           showToast(res.message, "success");
           setStatus(3);
           setShowRequested(false);
         } else if (status === 3) {
           const res = await FriendApi.removeFriend(currentUser._id, friend._id);
-          console.log(res);
+
           showToast(res.message, "warning");
           setStatus(0);
         }
@@ -89,7 +102,7 @@ const UserProfile = () => {
     try {
       if (currentUser && friend) {
         const res = await FriendApi.removeFriend(currentUser._id, friend._id);
-        console.log(res);
+
         showToast(res.message, "warning");
         setStatus(0);
         setShowRequested(false);
@@ -100,16 +113,10 @@ const UserProfile = () => {
   };
 
   useEffect(() => {
-    getPublishedTracks();
-    getLikedSongs();
-    getFriend();
-    setUser(state.user);
-    setCurrentUser(state.currentUser);
-    setStatus(state.status);
-    setShowRequested(state.requested);
-
+    fetchAllData();
+    setShowFriends(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [state]);
   return (
     <div className={styles.majorCont}>
       <div className={styles.profilePage}>
@@ -167,7 +174,7 @@ const UserProfile = () => {
             {showFrinds && (
               <div className={styles.friendRequestSec}>
                 Friends
-                <FriendList you={currentUser} requested={false} user={user!} />
+                <UsersFriendList user={currentUser!} friend={user!} />
               </div>
             )}
           </div>

@@ -39,7 +39,7 @@ export interface fetchedTrack extends Track {
   _id: string;
 }
 
-const Profile = ({ isArtist, user }: ProfileProps) => {
+const Profile = ({ user }: ProfileProps) => {
   const {
     register,
     handleSubmit,
@@ -52,7 +52,8 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
   const pfpFileRef = useRef<HTMLInputElement | null>(null);
   const pfpEmailRef = useRef<HTMLInputElement | null>(null);
 
-  // const [currentUser, setCurrentUser] = useState<FetchedUser | null>(null);
+  const [currentUser, setCurrentUser] = useState<FetchedUser>(user!);
+  // const [isartist, setIsArtist] = useState<boolean>(isArtist);
   const [tracks, setTracks] = useState<fetchedTrack[]>([]);
   const [trackId, setTrackId] = useState<string>("");
   const [showFrinds, setShowFriends] = useState<boolean>(false);
@@ -117,7 +118,9 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
         res = await userApi.updateUser(user._id, {
           isArtist: true,
         });
-      console.log(res);
+      setCurrentUser(res);
+      showToast("Account upgraded to artist ", "success");
+      console.log(currentUser);
     } catch (error) {
       if (error instanceof Error) showToast(error.message, "warning");
     }
@@ -160,11 +163,11 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
   };
 
   useEffect(() => {
-    // console.log(user);
     getLikedSongs();
     getPublishedTracks();
+    // setIsArtist(isArtist);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, currentUser]);
 
   return (
     <div className={styles.majorCont}>
@@ -251,7 +254,7 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
                 <p className={styles.pfpText}>Change profile</p>
                 <img
                   className={styles.pfpImg}
-                  src={user?.profileImgURL}
+                  src={currentUser?.profileImgURL}
                   alt="Profile Image"
                   onClick={() => {
                     pfpDialogRef.current?.showModal();
@@ -302,13 +305,15 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
             </div>
             <div className={styles.userName}>
               <p style={{ marginBottom: "-25px" }}>Profile</p>
-              {user?.username}
+              {currentUser?.username}
             </div>
           </div>
-          {!user?.isArtist && (
+          {!currentUser?.isArtist ? (
             <button className={styles.upgradeBtn} onClick={handleClick}>
               Upgrade to Artist
             </button>
+          ) : (
+            <p className={styles.upgradeBtn}>Artist</p>
           )}
         </div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -332,7 +337,7 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
             {showFrindReq && (
               <div className={styles.friendRequestSec}>
                 Pending Requests
-                <FriendList requested={true} user={user!} />
+                <FriendList requested={true} user={currentUser!} />
               </div>
             )}
           </div>
@@ -357,7 +362,7 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
             {showFrinds && (
               <div className={styles.friendSection}>
                 Friends
-                <FriendList requested={false} user={user!} />
+                <FriendList requested={false} user={currentUser!} />
               </div>
             )}
           </div>
@@ -365,12 +370,10 @@ const Profile = ({ isArtist, user }: ProfileProps) => {
         <div className={styles.topAlbumSec}>Top albums</div>
         <div className={styles.topTrackSec}>Top tracks</div>
 
-        {isArtist && (
+        {currentUser.isArtist && (
           <div>
             <div style={{ position: "relative" }}>
-              <p style={{ marginLeft: "50%", transform: "translateX(-25%)" }}>
-                Published Tracks
-              </p>
+              <p>Published Tracks</p>
               <div className={styles.playlistView}>
                 {tracks &&
                   tracks.map((track, index) => (

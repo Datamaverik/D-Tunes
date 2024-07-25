@@ -18,7 +18,7 @@ export const getLoggedInUser = async () => {
     return response.data;
   } catch (er) {
     console.error(er);
-    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
+    if (er instanceof AxiosError) throw new Error(er.message);
   }
 };
 
@@ -28,7 +28,7 @@ export const getUserById = async (userId: string) => {
     return response.data;
   } catch (er) {
     console.error(er);
-    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
+    if (er instanceof AxiosError) throw new AxiosError(er.response?.data.message);
   }
 };
 

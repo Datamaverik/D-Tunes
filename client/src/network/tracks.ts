@@ -80,16 +80,26 @@ export const getSearchedTracks = async (query: string) => {
   }
 };
 
-interface lyricsCredentials{
-  artist?:string,
-  title?:string
+interface lyricsCredentials {
+  artist?: string;
+  title?: string;
 }
-export const getLyrics = async (credentials:lyricsCredentials)=>{
+export const getLyrics = async (credentials: lyricsCredentials) => {
   try {
-    const response = await api.post('/api/tracks/lyrics',credentials);
-    return response.data
+    const response = await api.post("/api/tracks/lyrics", credentials);
+    return response.data;
   } catch (er) {
     console.error(er);
     if (er instanceof AxiosError) throw new Error(er.message);
   }
-}
+};
+
+export const removeTrack = async (trackId: string) => {
+  try {
+    const response = await api.delete(`/api/tracks/delete/${trackId}`);
+    return response.data;
+  } catch (er) {
+    console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.message);
+  }
+};

@@ -80,13 +80,17 @@
   );
   backdrop-filter: blur(2px);
 }
-.songImgCont {
+.songImgCont,
+.yourImgCont {
   width: 3.5em;
   height: 2.8em;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   margin-right: 1rem;
+}
+.yourImgCont {
+  width: 3.3rem;
 }
 .songName {
   width: 100%;
@@ -161,7 +165,7 @@
   padding: 10px;
   font-size: large;
 }
-.lyricsCont{
+.lyricsCont {
   background-color: rgba(31, 31, 31, 0.774);
   backdrop-filter: blur(5px);
   padding: 10px;
@@ -172,7 +176,6 @@
   margin-left: 6%;
   height: 60vh;
   overflow-y: scroll;
-
 }
 .dropDownItems:hover {
   transform: scale(1.2);
@@ -183,15 +186,16 @@
   font-weight: lighter;
   color: rgba(124, 124, 124, 0.894);
 }
-.artistName{
+.artistName {
   color: gray;
   font-weight: lighter;
   font-size: 1rem;
 }
-.yourName{
-  font-size: 2rem;
+.yourName {
+  font-size: 1.3rem;
 }
-.you{
+.you {
+  font-weight: lighter;
   color: gray;
 }
 @media (max-width: 768px) {
