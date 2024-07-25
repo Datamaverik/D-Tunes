@@ -49,11 +49,10 @@ const TrackHistoryList = () => {
   useEffect(() => {
     getLikedSongs();
     getTrackHistory();
-    console.log(tracks);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className={styles.trackCont} style={{ position: "relative",height:"30vh" }}>
+    <div className={styles.trackCont}>
       <div style={{marginBottom:"-10px"}} className={styles.playlistView}>
         {tracks &&
           tracks.map((track, index) => (

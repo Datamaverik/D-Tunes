@@ -49,6 +49,9 @@
   height: 70vh;
   margin-bottom: 1rem;
 }
+.profileGenreCardCont {
+  height: 33vh;
+}
 
 .playlistView {
   display: flex;
@@ -110,6 +113,7 @@
   position: fixed;
   bottom: 0px;
   width: 70%;
+  z-index: 100;
 }
 .playerCont {
   margin: 0px;
@@ -198,6 +202,10 @@
   font-weight: lighter;
   color: gray;
 }
+.trackCont {
+  position: relative;
+  height: 57vh;
+}
 @media (max-width: 768px) {
   .genreCardCont {
     grid-template-columns: 1fr 1fr;
@@ -219,6 +227,13 @@
   }
   .trackPlayer {
     width: 100%;
+  }
+  .trackCont {
+    position: relative;
+    height: 60vh;
+  }
+  .profileGenreCardCont {
+    height: 35vh;
   }
 }
 

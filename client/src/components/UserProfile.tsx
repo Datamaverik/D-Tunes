@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import styles from "../components/styles/profile.module.css";
-// import FriendList from "../pages/FriendList";
 import { FetchedUser, fetchedTrack } from "../pages/Profile";
 import PlaylistView from "./PlaylistView";
 import SongPlayer from "./SongPlayer";
 import * as FriendApi from "../network/friends";
 import * as trackApi from "../network/tracks";
 import * as UserApi from "../network/api";
+import * as PlaylistApi from "../network/playlist";
 import useToast from "../CustomHooks/Toast.hook";
 import { useLocation } from "react-router-dom";
 import UsersFriendList from "./UsersFriendList";
+import { fetchedPlaylistModel } from "./Sidebar";
+import UserPlaylists from "./UserPlaylists";
 
 const UserProfile = () => {
   const { showToast } = useToast();
@@ -23,6 +25,7 @@ const UserProfile = () => {
   const [user, setUser] = useState<FetchedUser>(state.user);
   const [Status, setStatus] = useState<number>(state.status);
   const [friend, setFriend] = useState<FetchedUser | null>(null);
+  const [playlists, setPlaylists] = useState<fetchedPlaylistModel[]>([]);
   const [showRequested, setShowRequested] = useState<boolean>(state.requested);
   const [currentUser, setCurrentUser] = useState<FetchedUser>(
     state.currentUser
@@ -47,6 +50,15 @@ const UserProfile = () => {
       console.error(er);
     }
   }
+  const fetchPlaylists = async () => {
+    try {
+      const response: fetchedPlaylistModel[] =
+        await PlaylistApi.getUserPublicPlaylistById(user._id);
+      setPlaylists(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const fetchAllData = async () => {
     try {
@@ -115,6 +127,7 @@ const UserProfile = () => {
   useEffect(() => {
     fetchAllData();
     setShowFriends(false);
+    fetchPlaylists();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
   return (
@@ -154,7 +167,7 @@ const UserProfile = () => {
             </div>
           )}
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className={styles.friendList} style={{ display: "flex", justifyContent: "space-between" }}>
           <div
             style={{
               display: "flex",
@@ -179,34 +192,51 @@ const UserProfile = () => {
             )}
           </div>
         </div>
-
-        {user.isArtist && (
-          <div>
-            <div style={{ position: "relative" }}>
-              <p style={{ marginLeft: "50%", transform: "translateX(-25%)" }}>
-                Published Tracks
-              </p>
-              <div className={styles.playlistView}>
-                {tracks &&
-                  tracks.map((track, index) => (
-                    <PlaylistView
-                      artist={track.artists[0].name}
-                      duration={track.duration_ms}
-                      songId={track.id}
-                      isLiked={likedSongs.includes(track.id)}
-                      onClick={() => {
-                        setTrackId(track.id);
-                      }}
-                      key={index}
-                      name={track.name}
-                      icon={track.album.images[0]}
-                    />
-                  ))}
-              </div>
-              <SongPlayer id={trackId} songs={tracks} />
-            </div>
+        <div className={styles.publicPlaylists}>
+          Public Playlists
+          <div style={{marginBottom:"10px"}}>
+            {playlists &&
+              playlists.map((playlist) => (
+                <UserPlaylists
+                  onDelete={() => {
+                    console.log("clicked");
+                  }}
+                  playlistId={playlist._id}
+                  key={playlist.name}
+                  name={playlist.name}
+                  image={playlist.images[0]}
+                  totalDuration={playlist.duration}
+                />
+              ))}
           </div>
-        )}
+        </div>
+        <div className={styles.pulishedTracks}>
+          {user.isArtist && (
+            <div>
+              <div style={{ position: "relative" }}>
+                Published Tracks
+                <div className={styles.playlistView}>
+                  {tracks &&
+                    tracks.map((track, index) => (
+                      <PlaylistView
+                        artist={track.artists[0].name}
+                        duration={track.duration_ms}
+                        songId={track.id}
+                        isLiked={likedSongs.includes(track.id)}
+                        onClick={() => {
+                          setTrackId(track.id);
+                        }}
+                        key={index}
+                        name={track.name}
+                        icon={track.album.images[0]}
+                      />
+                    ))}
+                </div>
+                <SongPlayer id={trackId} songs={tracks} />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -318,7 +318,7 @@ const Profile = ({ user }: ProfileProps) => {
             <p className={styles.upgradeBtn}>Artist</p>
           )}
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className={styles.friendSec} style={{ display: "flex", justifyContent: "space-between",marginBottom:"1rem" }}>
           <div
             style={{
               display: "flex",
@@ -375,7 +375,7 @@ const Profile = ({ user }: ProfileProps) => {
         </div>
         <div className={styles.topAlbumSec}>
           Top albums
-          <PlaylistHistory/>
+          <PlaylistHistory />
         </div>
 
         {currentUser.isArtist && (

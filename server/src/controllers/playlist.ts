@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import createHttpError from "http-errors";
 import PlaylistModel from "../models/playlist";
 import mongoose from "mongoose";
@@ -12,7 +12,7 @@ export const createPlaylist = async (
   res: Response,
   next: NextFunction
 ) => {
-  const name = req.body.name
+  const name = req.body.name;
   const isPublic = req.body.isPublic;
   const imageUrl = req.body.imageUrl;
   try {
@@ -215,5 +215,24 @@ export const removePlaylist = async (
     res.status(200).json(playlist);
   } catch (er) {
     console.error(er);
+  }
+};
+
+export const getUserPublicPlaylistById: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
+  const userId = req.params.userId;
+  try {
+    const user = await UserModel.findById(userId).exec();
+    if (!user) throw createHttpError(404, "User not found");
+
+    const playlists = await PlaylistModel.find({
+      $and: [{ author: user._id }, { isPublic: true }],
+    }).exec();
+    res.status(200).json(playlists);
+  } catch (er) {
+    next(er);
   }
 };

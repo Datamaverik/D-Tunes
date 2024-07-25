@@ -6,6 +6,7 @@ import { FieldError, useForm } from "react-hook-form";
 import TextInputField from "./form/TextInputField";
 import { icons } from "../models/icons";
 import LikedSongs from "./LikedSongs";
+import useToast from "../CustomHooks/Toast.hook";
 
 export interface fetchedPlaylistModel {
   _id: string;
@@ -25,7 +26,7 @@ interface playlistInput {
 
 const Sidebar = () => {
   const dialogBox = document.getElementById("myDialog") as HTMLDialogElement;
-
+  const { showToast } = useToast();
   const {
     register,
     handleSubmit,
@@ -43,12 +44,11 @@ const Sidebar = () => {
       if (credentials.images && credentials.images.length > 0) {
         formData.append("image", credentials.images[0]);
       }
-      
+
       const newPlaylist = await playlistApi.createPlaylist(formData);
-      console.log("credentials sent from sidebar");
+      showToast("Playlist Created successfully", "success");
 
       setPlaylists([...playlists, newPlaylist]);
-      console.log(newPlaylist);
     } catch (er) {
       console.error(er);
     }

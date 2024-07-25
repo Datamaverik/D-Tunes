@@ -14,6 +14,11 @@ router.get("/userAll", PlaylistController.getUserAllPlaylists);
 
 router.get("/:playlistId", PlaylistController.getPlaylistById);
 
+router.get(
+  "/userPublic/:userId",
+  PlaylistController.getUserPublicPlaylistById
+);
+
 router.delete("/delete/:playlistId", PlaylistController.removePlaylist);
 
 router.post(

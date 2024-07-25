@@ -43,7 +43,7 @@ const PlaylistHistory = () => {
   }
 
   return (
-    <div className={styles.genreCardCont}>
+    <div className={`${styles.genreCardCont} ${styles.profileGenreCardCont}`}>
       {playlists &&
         playlists.map((playlist, ind) => (
           <GenreCard

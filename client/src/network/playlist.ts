@@ -73,6 +73,16 @@ export const getAllUserPlaylists = async () => {
   }
 };
 
+export const getUserPublicPlaylistById = async (userId: string) => {
+  try {
+    const response = await api.get(`/api/playlist/userPublic/${userId}`);
+    return response.data;
+  } catch (er) {
+    console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.response?.data.message);
+  }
+};
+
 export const getPlaylistById = async (playlistId: string) => {
   try {
     const response = await api.get(`/api/playlist/${playlistId}`);
