@@ -1,4 +1,3 @@
-
 import * as SpotifyController from "../controllers/spotify";
 import { checkToken } from "../middlewares/checkToken";
 
@@ -22,13 +21,32 @@ declare global {
 
 const router = express.Router();
 
-router.get('/genres',checkToken,SpotifyController.getSpotifyGenres);
-router.get('/genres/:genreId',checkToken,SpotifyController.getPlaylistsByGenre);
-router.get("/playlists/:playlistId",checkToken,SpotifyController.getTracksOfPlaylist);
-router.get('/playlist/:trackId',checkToken,SpotifyController.getTrack);
+router.get("/genres", checkToken, SpotifyController.getSpotifyGenres);
+
+router.get(
+  "/genres/:genreId",
+  checkToken,
+  SpotifyController.getPlaylistsByGenre
+);
+
+router.get(
+  "/playlistById/:playlistId",
+  checkToken,
+  SpotifyController.getPlaylistById
+);
+
+router.get(
+  "/playlists/:playlistId",
+  checkToken,
+  SpotifyController.getTracksOfPlaylist
+);
+
+router.get("/playlist/:trackId", checkToken, SpotifyController.getTrack);
+
 router.get("/access-token", checkToken, (req, res) => {
   res.json({ accessToken: req.accessToken });
 });
-router.get('/search',checkToken,SpotifyController.searchSpotify);
+
+router.get("/search", checkToken, SpotifyController.searchSpotify);
 
 export default router;

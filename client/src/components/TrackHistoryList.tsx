@@ -1,14 +1,16 @@
-import { useLocation } from "react-router-dom";
 import styles from "../components/styles/Genre.module.css";
-import { Track } from "../models/SpotifyTrack";
 import PlaylistView from "../components/PlaylistView";
 import * as UserApi from "../network/api";
 import { useEffect, useState } from "react";
 import SongPlayer from "../components/SongPlayer";
+import { fetchedTrack } from "../pages/Profile";
+import * as spotifyApi from "../network/spotify";
+import * as trackApi from "../network/tracks";
+import { isValidMongoObjectID } from "../utils/monogIdvalidator";
 
-const Searchlist = () => {
-  const { state } = useLocation();
-  const tracks: Track[] = state.track;
+const TrackHistoryList = () => {
+  //   const tracks: Track[] = track;
+  const [tracks, setTracks] = useState<fetchedTrack[]>([]);
   const [trackId, setTrackId] = useState<string | null>(null);
   const [likedSongs, setLikedSongs] = useState<string[]>([]);
 
@@ -21,10 +23,24 @@ const Searchlist = () => {
     }
   }
 
+  async function getTrackHistory() {
+    try {
+      const user = await UserApi.getLoggedInUser();
+      const trackIdArr = user.user.trackHistory;
+      const songPromises = trackIdArr.map((song: string) => {
+        if (isValidMongoObjectID(song)) return trackApi.getTrackByID(song);
+        else return spotifyApi.getTrack(song);
+      });
+      const songs = await Promise.all(songPromises);
+      setTracks(songs);
+    } catch (er) {
+      console.error(er);
+    }
+  }
+
   async function updateTrack(trackId: string) {
     try {
-      const res = await UserApi.pushTrack(trackId);
-      console.log(res);
+      await UserApi.pushTrack(trackId);
     } catch (er) {
       console.error(er);
     }
@@ -32,11 +48,13 @@ const Searchlist = () => {
 
   useEffect(() => {
     getLikedSongs();
+    getTrackHistory();
+    console.log(tracks);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state]);
+  }, []);
   return (
-    <div className={styles.trackCont} style={{ position: "relative" }}>
-      <div className={styles.playlistView}>
+    <div className={styles.trackCont} style={{ position: "relative",height:"30vh" }}>
+      <div style={{marginBottom:"-10px"}} className={styles.playlistView}>
         {tracks &&
           tracks.map((track, index) => (
             <PlaylistView
@@ -54,9 +72,9 @@ const Searchlist = () => {
             />
           ))}
       </div>
-      <SongPlayer id={trackId} songs={state.track} />
+      <SongPlayer id={trackId} songs={tracks} />
     </div>
   );
 };
 
-export default Searchlist;
+export default TrackHistoryList;

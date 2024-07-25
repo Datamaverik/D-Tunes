@@ -1,7 +1,7 @@
 import axios from "axios";
 import env from "../utils/validateEnv";
 import createHttpError from "http-errors";
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import tokenModel from "../models/spotify";
 
 const clientId = env.SPOTIFY_CLIENT_ID;
@@ -97,6 +97,20 @@ export const getPlaylistsByGenre = async (
       }
     );
     res.status(200).json(response.data.playlists.items);
+  } catch (er) {
+    console.error(er);
+    next(er);
+  }
+};
+export const getPlaylistById: RequestHandler = async (req, res, next) => {
+  const playlistId = req.params.playlistId;
+  const token = await tokenModel.findById(env.TOKEN_ID);
+  const accessToken = token?.access_token;
+  try {
+    const response = await axios.get(`${baseURL}/playlists/${playlistId}`, {
+      headers: { Authorization: "Bearer " + accessToken },
+    });
+    return res.status(200).json(response.data);
   } catch (er) {
     console.error(er);
     next(er);

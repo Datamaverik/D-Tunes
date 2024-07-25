@@ -27,6 +27,7 @@ export const getPlaylists = async (genreId: string) => {
     console.error(er);
   }
 };
+
 export const getTracksOfPlaylist = async (playlistId: string) => {
   try {
     const response = await api.get(`/api/songs/playlists/${playlistId}`);
@@ -59,6 +60,15 @@ export const getSerchedSongs = async (query: string) => {
     const response = await api.get("/api/songs/search", {
       params: { q: query },
     });
+    return response.data;
+  } catch (er) {
+    console.error(er);
+  }
+};
+
+export const getPlaylistById = async (playlistId: string) => {
+  try {
+    const response = await api.get(`/api/songs/playlistById/${playlistId}`);
     return response.data;
   } catch (er) {
     console.error(er);

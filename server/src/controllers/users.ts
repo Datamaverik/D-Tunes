@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 import env from "../utils/validateEnv";
 import * as CloudinaryController from "../utils/cloudinary";
 import axios from "axios";
+import { kMaxLength } from "buffer";
 
 const client_id = env.DATUTH_CLIENT_ID;
 const client_secret = env.DAUTH_CLIENT_SECRET;
@@ -365,6 +366,52 @@ export const dAuthAuthenticate: RequestHandler = async (req, res, next) => {
       sendCookie(user._id, res);
       res.status(200).json({ message: "Login successful", user });
     }
+  } catch (er) {
+    next(er);
+  }
+};
+
+export const updateTrackHistory: RequestHandler = async (req, res, next) => {
+  const songId = req.body.songId;
+  try {
+    const token = req.cookies.token;
+    if (!token) throw createHttpError(401, "Unatuthorized: No token provided");
+    const decoded = jwt.verify(token, env.JWT_SECRET!) as {
+      userId: mongoose.Types.ObjectId;
+    };
+    const user = await UserModel.findById(decoded.userId).exec();
+
+    if (!user) throw createHttpError(404, "User not found");
+
+    if (!user.trackHistory.includes(songId)) {
+      if (user.trackHistory.length > 4) user.trackHistory.splice(0, 1);
+      user.trackHistory.push(songId);
+    }
+    await user.save();
+    return res.status(200).json(user.trackHistory);
+  } catch (er) {
+    next(er);
+  }
+};
+
+export const updatePlaylistHistory: RequestHandler = async (req, res, next) => {
+  const playlistId = req.body.playlistId;
+  try {
+    const token = req.cookies.token;
+    if (!token) throw createHttpError(401, "Unatuthorized: No token provided");
+    const decoded = jwt.verify(token, env.JWT_SECRET!) as {
+      userId: mongoose.Types.ObjectId;
+    };
+    const user = await UserModel.findById(decoded.userId).exec();
+
+    if (!user) throw createHttpError(404, "User not found");
+
+    if (!user.albumHistory.includes(playlistId)) {
+      if (user.albumHistory.length > 4) user.albumHistory.splice(0, 1);
+      user.albumHistory.push(playlistId);
+    }
+    await user.save();
+    return res.status(200).json(user.albumHistory);
   } catch (er) {
     next(er);
   }

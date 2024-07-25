@@ -12,6 +12,8 @@ import PlaylistView from "../components/PlaylistView";
 import SongPlayer from "../components/SongPlayer";
 import { Track } from "../models/SpotifyTrack";
 import FriendList from "./FriendList";
+import TrackHistoryList from "../components/TrackHistoryList";
+import PlaylistHistory from "../components/PlaylistHistory";
 
 export interface FetchedUser {
   _id: string;
@@ -367,8 +369,14 @@ const Profile = ({ user }: ProfileProps) => {
             )}
           </div>
         </div>
-        <div className={styles.topAlbumSec}>Top albums</div>
-        <div className={styles.topTrackSec}>Top tracks</div>
+        <div className={styles.topTrackSec}>
+          Recent Tracks
+          <TrackHistoryList />
+        </div>
+        <div className={styles.topAlbumSec}>
+          Top albums
+          <PlaylistHistory/>
+        </div>
 
         {currentUser.isArtist && (
           <div>

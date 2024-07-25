@@ -1,37 +1,33 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import * as UserApi from "../network/api";
 import * as SpotifyApi from "../network/spotify";
 import { playlistsByGenre } from "../models/playlistsByGenre";
 import styles from "../components/styles/Genre.module.css";
 import GenreCard from "../components/GenreCard";
+import { useNavigate } from "react-router-dom";
 
-interface PlaylistProps {
-  onClick: (id: string) => void;
-}
-
-const Tracks = ({ onClick }: PlaylistProps) => {
-  const { id } = useParams<{ id: string }>();
-
+const PlaylistHistory = () => {
+  const navigate = useNavigate();
   const [playlists, setPlaylists] = useState<playlistsByGenre[] | null>(null);
 
   async function getGenrePlaylists() {
     try {
-      if (!id) return;
-      else {
-        const response = await SpotifyApi.getPlaylists(id);
-        console.log(response);
-        setPlaylists(response);
-      }
+      const user = await UserApi.getLoggedInUser();
+      const playlistIdArr = user.user.albumHistory;
+      const playlistPromises = playlistIdArr.map((playlistId: string) => {
+        return SpotifyApi.getPlaylistById(playlistId);
+      });
+      const playlistArr = await Promise.all(playlistPromises);
+      setPlaylists(playlistArr);
     } catch (er) {
       console.error(er);
     }
   }
+  
 
   async function pushPlaylist(playlistId: string) {
     try {
-      const response = await UserApi.pushPlaylist(playlistId);
-      console.log(response);
+      await UserApi.pushPlaylist(playlistId);
     } catch (er) {
       console.error(er);
     }
@@ -40,10 +36,10 @@ const Tracks = ({ onClick }: PlaylistProps) => {
   useEffect(() => {
     getGenrePlaylists();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, []);
 
   function handleClick(id: string) {
-    onClick(id);
+    navigate(`/playlist/${id}`);
   }
 
   return (
@@ -64,4 +60,4 @@ const Tracks = ({ onClick }: PlaylistProps) => {
   );
 };
 
-export default Tracks;
+export default PlaylistHistory;

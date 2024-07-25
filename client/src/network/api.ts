@@ -28,7 +28,8 @@ export const getUserById = async (userId: string) => {
     return response.data;
   } catch (er) {
     console.error(er);
-    if (er instanceof AxiosError) throw new AxiosError(er.response?.data.message);
+    if (er instanceof AxiosError)
+      throw new AxiosError(er.response?.data.message);
   }
 };
 
@@ -156,6 +157,30 @@ export const authenticate = async () => {
         scope: "email+openid+profile+user",
         nonce: "qm2a@g5!ap&5#b",
       },
+    });
+    return response.data;
+  } catch (er) {
+    console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.message);
+  }
+};
+
+export const pushTrack = async (songId: string) => {
+  try {
+    const response = await api.post(`/api/users/pushTrack`, {
+      songId,
+    });
+    return response.data;
+  } catch (er) {
+    console.error(er);
+    if (er instanceof AxiosError) throw new Error(er.message);
+  }
+};
+
+export const pushPlaylist = async (playlistId: string) => {
+  try {
+    const response = await api.post(`/api/users/pushPlaylist`, {
+      playlistId,
     });
     return response.data;
   } catch (er) {

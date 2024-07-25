@@ -36,6 +36,15 @@ const Playlist = () => {
     }
   }
 
+  async function updateTrack(trackId: string) {
+    try {
+      const res = await UserApi.pushTrack(trackId);
+      console.log(res);
+    } catch (er) {
+      console.error(er);
+    }
+  }
+
   useEffect(() => {
     getPlaylistsTracks();
     getLikedSongs();
@@ -48,11 +57,12 @@ const Playlist = () => {
         {tracks &&
           tracks.map((track, index) => (
             <PlaylistView
-            artist={track.track.artists[0].name}
+              artist={track.track.artists[0].name}
               songId={track.track.id}
               isLiked={likedSongs.includes(track.track.id)}
               onClick={() => {
                 setTrackId(track.track.id);
+                updateTrack(track.track.id);
               }}
               key={index}
               name={track.track.name}

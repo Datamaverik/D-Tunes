@@ -22,6 +22,10 @@ router.get("/search", UserController.searchUsers);
 
 router.get("/searchOne/:userId", UserController.getUserById);
 
+router.post("/pushTrack", UserController.updateTrackHistory);
+
+router.post("/pushPlaylist", UserController.updatePlaylistHistory);
+
 router.post(
   "/update/:userId",
   upload.single("image"),
