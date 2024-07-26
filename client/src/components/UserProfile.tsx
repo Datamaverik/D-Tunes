@@ -100,8 +100,11 @@ const UserProfile = () => {
           setShowRequested(false);
         } else if (status === 3) {
           const res = await FriendApi.removeFriend(currentUser._id, friend._id);
-
           showToast(res.message, "warning");
+          setStatus(0);
+        } else if (status === 1) {
+          await FriendApi.removeFriend(currentUser._id, friend._id);
+          showToast("Friend Request Cancelled", "warning");
           setStatus(0);
         }
       }
@@ -161,13 +164,16 @@ const UserProfile = () => {
                 {Status === 0
                   ? "Add Friend"
                   : Status === 1
-                  ? "Pending"
+                  ? "Cancel Request"
                   : "Remove Friend"}
               </button>
             </div>
           )}
         </div>
-        <div className={styles.friendList} style={{ display: "flex", justifyContent: "space-between" }}>
+        <div
+          className={styles.friendList}
+          style={{ display: "flex", justifyContent: "space-between" }}
+        >
           <div
             style={{
               display: "flex",
@@ -194,7 +200,7 @@ const UserProfile = () => {
         </div>
         <div className={styles.publicPlaylists}>
           Public Playlists
-          <div style={{marginBottom:"10px"}}>
+          <div style={{ marginBottom: "10px" }}>
             {playlists &&
               playlists.map((playlist) => (
                 <UserPlaylists

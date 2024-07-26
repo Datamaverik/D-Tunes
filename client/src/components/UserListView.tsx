@@ -35,7 +35,6 @@ const UserListView = ({ friendId, status, requested }: UserListViewProps) => {
       if (currentUser && friend) {
         if (status === 0) {
           const res = await FriendApi.addFriendReq(currentUser._id, friend._id);
-          console.log(res);
           showToast(res.message, "success");
           setStatus(1);
         } else if (status === 2) {
@@ -43,15 +42,17 @@ const UserListView = ({ friendId, status, requested }: UserListViewProps) => {
             currentUser._id,
             friend._id
           );
-          console.log(res);
           showToast(res.message, "success");
           setStatus(3);
           setShowRequested(false);
         } else if (status === 3) {
           const res = await FriendApi.removeFriend(currentUser._id, friend._id);
-          console.log(res);
           showToast(res.message, "warning");
           setStatus(0);
+        } else if (status === 1) {
+          await FriendApi.removeFriend(currentUser._id, friend._id);
+          showToast("Friend Request Cancelled", "warning");
+          setStatus(0)
         }
       }
     } catch (er) {
@@ -62,7 +63,6 @@ const UserListView = ({ friendId, status, requested }: UserListViewProps) => {
     try {
       if (currentUser && friend) {
         const res = await FriendApi.removeFriend(currentUser._id, friend._id);
-        console.log(res);
         showToast(res.message, "warning");
         setStatus(0);
         setShowRequested(false);
@@ -116,7 +116,7 @@ const UserListView = ({ friendId, status, requested }: UserListViewProps) => {
               {Status === 0
                 ? "Add Friend"
                 : Status === 1
-                ? "Pending"
+                ? "Cancel Request"
                 : "Remove Friend"}
             </button>
           </div>
