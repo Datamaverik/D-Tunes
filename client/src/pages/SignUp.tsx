@@ -4,6 +4,7 @@ import styles from "../components/styles/form.module.css";
 import * as UserApi from "../network/api";
 import { AxiosError } from "axios";
 import useToast from "../CustomHooks/Toast.hook";
+import useLoading from "../CustomHooks/Loading.hook";
 
 interface SignUpPageProps {
   onSuccessfulSignUp: (username: string) => void;
@@ -16,9 +17,11 @@ const SignUp = ({ onSuccessfulSignUp }: SignUpPageProps) => {
     formState: { errors },
   } = useForm<UserApi.signUpCredentials>();
 
+  const {setLoading} = useLoading();
   const { showToast } = useToast();
 
   async function onSubmit(credentials: UserApi.signUpCredentials) {
+    setLoading(true);
     try {
       const newUser = await UserApi.signUp(credentials);
       if (newUser) {
@@ -31,6 +34,9 @@ const SignUp = ({ onSuccessfulSignUp }: SignUpPageProps) => {
         console.log("toast");
         showToast(er.response?.data.message, "warning");
       }
+    }
+    finally{
+      setLoading(false);
     }
   }
 

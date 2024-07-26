@@ -4,12 +4,15 @@ import App from "./App.tsx";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { ToastProvider } from "./Contexts/Toast.context.tsx";
+import { LoadingProvider } from "./Contexts/Loading.context.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <ToastProvider>
-        <App />
+        <LoadingProvider>
+          <App />
+        </LoadingProvider>
       </ToastProvider>
     </BrowserRouter>
   </React.StrictMode>

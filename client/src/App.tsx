@@ -19,8 +19,12 @@ import ToastList from "./components/ToastList";
 import useToast from "./CustomHooks/Toast.hook";
 import UserList from "./pages/UserList";
 import UserProfile from "./components/UserProfile";
+import { LoadingProvider } from "./Contexts/Loading.context";
+import LoadingScren from "./pages/LoadingScren";
+import useLoading from "./CustomHooks/Loading.hook";
 
 function App() {
+  const { isLoading } = useLoading();
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<FetchedUser | null>(null);
   const [isArtist, setIsArtist] = useState<boolean>(false);
@@ -82,69 +86,76 @@ function App() {
   };
 
   return (
-    <>
-      <div className={styles.navbarCont}>
-        <Navbar
-          loggedInUser={loggedInUser}
-          onLogOutSuccessful={handleLogout}
-          onToggleSidebar={() => {
-            toggleSidebar();
-          }}
-          links={
-            <div className={styles.links}>
-              <NavLink to={"/api/signup"}>Signup</NavLink>
-              <NavLink to={"/api/login"}>Login</NavLink>
-            </div>
-          }
-          homeLink={
-            <NavLink to={"/"}>
-              <img
-                className={styles.logos}
-                src="../icons8-home.svg"
-                alt=""
-                id="home-logo"
+    <LoadingProvider>
+      {isLoading && <LoadingScren />}
+      {!isLoading && (
+        <>
+          <div className={styles.navbarCont}>
+            <Navbar
+              loggedInUser={loggedInUser}
+              onLogOutSuccessful={handleLogout}
+              onToggleSidebar={() => {
+                toggleSidebar();
+              }}
+              links={
+                <div className={styles.links}>
+                  <NavLink to={"/api/signup"}>Signup</NavLink>
+                  <NavLink to={"/api/login"}>Login</NavLink>
+                </div>
+              }
+              homeLink={
+                <NavLink to={"/"}>
+                  <img
+                    className={styles.logos}
+                    src="../icons8-home.svg"
+                    alt=""
+                    id="home-logo"
+                  />
+                </NavLink>
+              }
+            />
+          </div>
+          <ToastList removeToast={removeToast} data={toasts} />
+          <Routes>
+            <Route element={<PrivateRoute loggedInUser={loggedInUser} />}>
+              <Route
+                path="/"
+                element={<HomeLayout isSidebarVisible={isSidebarVisible} />}
+              >
+                <Route
+                  path="/"
+                  element={<Genres onClick={handleGenreClick} />}
+                />
+                <Route
+                  path="/tracks/:id"
+                  element={<Tracks onClick={handlePlaylistClick} />}
+                />
+                <Route path="/playlist/:id" element={<Playlist />} />
+                <Route path="/serachlist" element={<Searchlist />} />
+                <Route path="/userlist" element={<UserList />} />
+                <Route path="/userProfile" element={<UserProfile />} />
+                <Route path="/userTracks" element={<UserTracks />} />
+                <Route
+                  path="profile"
+                  element={<Profile isArtist={isArtist} user={currentUser} />}
+                />
+              </Route>
+            </Route>
+            <Route path="/api">
+              <Route
+                path="signup"
+                element={<SignUp onSuccessfulSignUp={handleSignup} />}
               />
-            </NavLink>
-          }
-        />
-      </div>
-      <ToastList removeToast={removeToast} data={toasts} />
-      <Routes>
-        <Route element={<PrivateRoute loggedInUser={loggedInUser} />}>
-          <Route
-            path="/"
-            element={<HomeLayout isSidebarVisible={isSidebarVisible} />}
-          >
-            <Route path="/" element={<Genres onClick={handleGenreClick} />} />
-            <Route
-              path="/tracks/:id"
-              element={<Tracks onClick={handlePlaylistClick} />}
-            />
-            <Route path="/playlist/:id" element={<Playlist />} />
-            <Route path="/serachlist" element={<Searchlist />} />
-            <Route path="/userlist" element={<UserList />} />
-            <Route path="/userProfile" element={<UserProfile />} />
-            <Route path="/userTracks" element={<UserTracks />} />
-            <Route
-              path="profile"
-              element={<Profile isArtist={isArtist} user={currentUser} />}
-            />
-          </Route>
-        </Route>
-
-        <Route path="/api">
-          <Route
-            path="signup"
-            element={<SignUp onSuccessfulSignUp={handleSignup} />}
-          />
-          <Route
-            path="login"
-            element={<Login onSuccessfulLogin={handleLogin} />}
-          />
-        </Route>
-        <Route path="*" element={<NotFoundPg />} />
-      </Routes>
-    </>
+              <Route
+                path="login"
+                element={<Login onSuccessfulLogin={handleLogin} />}
+              />
+            </Route>
+            <Route path="*" element={<NotFoundPg />} />
+          </Routes>
+        </>
+      )}
+    </LoadingProvider>
   );
 }
 

@@ -57,7 +57,6 @@ const TrackPlayer = ({ id, playlistId }: TrackPlayerProps) => {
         title,
         artist,
       });
-      console.log(lyrics);
       const lines: string[] = lyrics.split("\n");
       setLyrics(lines);
     } catch (er) {
@@ -94,7 +93,6 @@ const TrackPlayer = ({ id, playlistId }: TrackPlayerProps) => {
       const track = tracks.find((track) => track.track.id === id);
       setCurrentTrack(track);
       if (track) fetchLyrics(track.track.name, track?.track.artists[0].name);
-      console.log(track);
       if (track) {
         if (!track.track.preview_url) playNextSong(track);
         else setAudio(track.track.preview_url);

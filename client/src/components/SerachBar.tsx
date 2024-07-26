@@ -6,8 +6,10 @@ import * as UserApi from "../network/api";
 import { useNavigate } from "react-router-dom";
 import ToggleBtn from "./ToggleBtn";
 import { FetchedUser } from "../pages/Profile";
+import useLoading from "../CustomHooks/Loading.hook";
 
 const SerachBar = () => {
+  const {setLoading} = useLoading();
   const [query, setQuery] = useState<string>("");
   const [isSpotifySearch, setIsSpotifySearch] = useState<boolean>(false);
   // const [users, setUsers] = useState<User[]>([]);
@@ -18,6 +20,7 @@ const SerachBar = () => {
   };
 
   const handleSearch = async () => {
+    setLoading(true);
     try {
       if (isSpotifySearch) {
         const response = await SpotifyApi.getSerchedSongs(query);
@@ -41,6 +44,9 @@ const SerachBar = () => {
       }
     } catch (er) {
       console.error(er);
+    }
+    finally{
+      setLoading(false);
     }
   };
 

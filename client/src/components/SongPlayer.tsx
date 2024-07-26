@@ -60,7 +60,6 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
         title,
         artist,
       });
-      console.log(lyrics);
       const lines: string[] = lyrics.split("\n");
       setLyrics(lines);
     } catch (er) {

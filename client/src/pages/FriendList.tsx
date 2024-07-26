@@ -23,8 +23,9 @@ const FriendList = ({ user, requested, you }: UserListProps) => {
   const [friends, setFriends] = useState<FetchedUserwithFriends | null>(null);
   async function getAllFriends() {
     try {
-      const friends = await FriendsApi.getAllFriends(user._id);
+      const friends:FetchedUserwithFriends = await FriendsApi.getAllFriends(user._id);
       setFriends(friends);
+      friends
     } catch (er) {
       console.error(er);
     }

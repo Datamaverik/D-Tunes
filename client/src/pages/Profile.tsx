@@ -157,6 +157,7 @@ const Profile = ({ user }: ProfileProps) => {
           credentials
         );
         console.log(updatedUser);
+        showToast("Profile updated Successfully", "success");
       }
     } catch (er) {
       console.error(er);
@@ -318,7 +319,14 @@ const Profile = ({ user }: ProfileProps) => {
             <p className={styles.upgradeBtn}>Artist</p>
           )}
         </div>
-        <div className={styles.friendSec} style={{ display: "flex", justifyContent: "space-between",marginBottom:"1rem" }}>
+        <div
+          className={styles.friendSec}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "1rem",
+          }}
+        >
           <div
             style={{
               display: "flex",

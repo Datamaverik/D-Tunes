@@ -4,6 +4,7 @@ import styles from "../components/styles/form.module.css";
 import * as UserApi from "../network/api";
 // import { AxiosError } from "axios";
 import useToast from "../CustomHooks/Toast.hook";
+import useLoading from "../CustomHooks/Loading.hook";
 
 interface LoginPageProps {
   onSuccessfulLogin: (username: string) => void;
@@ -16,9 +17,11 @@ const Login = ({ onSuccessfulLogin }: LoginPageProps) => {
     formState: { errors },
   } = useForm<UserApi.loginCredentials>();
 
+  const {setLoading} = useLoading();
   const { showToast } = useToast();
 
   async function onSubmit(credentials: UserApi.loginCredentials) {
+    setLoading(true);
     try {
       const user = await UserApi.login(credentials);
       if (user) {
@@ -31,19 +34,10 @@ const Login = ({ onSuccessfulLogin }: LoginPageProps) => {
       console.log(er);
       showToast(er.message, "warning");
     }
+    finally{
+      setLoading(false);
+    }
   }
-  // const state = generateSecureRandomString(32);
-  // const nonce = generateSecureRandomString(32);
-  // const authUrl = new URL("https://auth.delta.nitt.edu/authorize");
-  // authUrl.searchParams.append("client_id", "aDGjBgG1bapKnzrM");
-  // authUrl.searchParams.append("redirect_uri", "http://localhost:5000/home");
-  // authUrl.searchParams.append("grant_type", "authorization_code");
-  // authUrl.searchParams.append("state", state);
-  // authUrl.searchParams.append("scope", "email openid profile user");
-  // authUrl.searchParams.append("nonce", nonce);
-  // authUrl.searchParams.append("response_type", "code");
-  // localStorage.setItem("authState", state);
-  // localStorage.setItem("authNonce", nonce);
 
   function handleDAuth() {
     const authUrl = new URL("https://auth.delta.nitt.edu/authorize");
