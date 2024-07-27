@@ -12,8 +12,12 @@ import PlaylistView from "../components/PlaylistView";
 import SongPlayer from "../components/SongPlayer";
 import { Track } from "../models/SpotifyTrack";
 import FriendList from "./FriendList";
-import TrackHistoryList from "../components/TrackHistoryList";
+import TrackHistoryList, {
+  artistDistModel,
+  explicitModel,
+} from "../components/TrackHistoryList";
 import PlaylistHistory from "../components/PlaylistHistory";
+import Statistics from "../components/Statistics";
 
 export interface FetchedUser {
   _id: string;
@@ -39,6 +43,7 @@ export interface songInput {
 
 export interface fetchedTrack extends Track {
   _id: string;
+  explicit: boolean;
 }
 
 const Profile = ({ user }: ProfileProps) => {
@@ -55,11 +60,17 @@ const Profile = ({ user }: ProfileProps) => {
   const pfpEmailRef = useRef<HTMLInputElement | null>(null);
 
   const [currentUser, setCurrentUser] = useState<FetchedUser>(user!);
-  // const [isartist, setIsArtist] = useState<boolean>(isArtist);
   const [tracks, setTracks] = useState<fetchedTrack[]>([]);
   const [trackId, setTrackId] = useState<string>("");
   const [showFrinds, setShowFriends] = useState<boolean>(false);
   const [showFrindReq, setShowFriendReq] = useState<boolean>(false);
+  const [artistDist, setArtistDist] = useState<artistDistModel[] | null>(null);
+  const [explicitDist, setExplicitDist] = useState<explicitModel[] | null>(
+    null
+  );
+  const [showSongPlayer, setShowSongPlayer] = useState<boolean>(false);
+  const [showPublishPlayer, setShowPublishPlayer] = useState<boolean>(false);
+
   // const [showLikedSongs, setShowLikedSongs] = useState<boolean>(false);
 
   const { showToast } = useToast();
@@ -163,6 +174,13 @@ const Profile = ({ user }: ProfileProps) => {
       console.error(er);
       if (er instanceof Error) showToast(er.message, "failure");
     }
+  };
+
+  const artistUpdate = (data: artistDistModel[]) => {
+    setArtistDist(data);
+  };
+  const explicitUpdate = (data: explicitModel[]) => {
+    setExplicitDist(data);
   };
 
   useEffect(() => {
@@ -346,7 +364,7 @@ const Profile = ({ user }: ProfileProps) => {
             </button>
             {showFrindReq && (
               <div className={styles.friendRequestSec}>
-                Pending Requests
+                <h3>Pending Requests</h3>
                 <FriendList requested={true} user={currentUser!} />
               </div>
             )}
@@ -371,18 +389,34 @@ const Profile = ({ user }: ProfileProps) => {
             </button>
             {showFrinds && (
               <div className={styles.friendSection}>
-                Friends
+                <h3>Friends</h3>
                 <FriendList requested={false} user={currentUser!} />
               </div>
             )}
           </div>
         </div>
+        <div className={styles.statistics}>
+          {artistDist && explicitDist && (
+            <Statistics
+              artistDistribution={artistDist}
+              explicitDistribution={explicitDist}
+            />
+          )}
+        </div>
         <div className={styles.topTrackSec}>
-          Recent Tracks
-          <TrackHistoryList />
+          <h2>Recent Tracks</h2>
+          <TrackHistoryList
+            togglePlayer={() => {
+              setShowPublishPlayer(false);
+              setShowSongPlayer(true);
+            }}
+            onArtistUpdate={artistUpdate}
+            onExplicitUpdate={explicitUpdate}
+            showSongPlayer={showSongPlayer}
+          />
         </div>
         <div className={styles.topAlbumSec}>
-          Top albums
+          <h2>Top albums</h2>
           <PlaylistHistory />
         </div>
 
@@ -400,6 +434,8 @@ const Profile = ({ user }: ProfileProps) => {
                       isLiked={likedSongs.includes(track.id)}
                       onClick={() => {
                         setTrackId(track.id);
+                        setShowPublishPlayer(true);
+                        setShowSongPlayer(false);
                       }}
                       key={index}
                       name={track.name}
@@ -407,7 +443,7 @@ const Profile = ({ user }: ProfileProps) => {
                     />
                   ))}
               </div>
-              <SongPlayer id={trackId} songs={tracks} />
+              {showPublishPlayer && <SongPlayer id={trackId} songs={tracks} />}
             </div>
             <div className={styles.addSongs}>
               <button onClick={handleAdd}>Publish Track</button>

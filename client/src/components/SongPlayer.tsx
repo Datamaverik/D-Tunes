@@ -175,6 +175,7 @@ const TrackPlayer = ({ id, songs }: TrackPlayerProps) => {
       )}
       {showLyrics && (
         <div className={styles.lyricsCont}>
+          <h2>Lyrics</h2>
           {lyrics.map((line, index) => (
             <p key={index} className={styles.lyrics}>
               {line}

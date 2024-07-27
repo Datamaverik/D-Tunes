@@ -23,7 +23,6 @@ const PlaylistHistory = () => {
       console.error(er);
     }
   }
-  
 
   async function pushPlaylist(playlistId: string) {
     try {

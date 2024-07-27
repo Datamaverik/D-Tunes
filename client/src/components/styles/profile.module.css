@@ -154,6 +154,16 @@
 .friendSection {
   margin-right: 15px;
 }
+.charts {
+  display: flex;
+  flex-direction: row;
+  display: "flex";
+  overflow-x: "hidden";
+}
+.chartCont{
+  height: 50vh;
+  width: 33vw;
+}
 
 @media (max-width: 768px) {
   .userName {
@@ -167,7 +177,14 @@
   .upgradeBtn {
     font-size: 1rem;
   }
-  .friendSection,.friendRequestSec {
+  .friendSection,
+  .friendRequestSec {
     width: 80vw;
+  }
+  .charts{
+    flex-direction: column;
+  }
+  .chartCont{
+    width: 100vw;
   }
 }
