@@ -8,11 +8,10 @@ import jwt from "jsonwebtoken";
 import env from "../utils/validateEnv";
 import * as CloudinaryController from "../utils/cloudinary";
 import axios from "axios";
-import { kMaxLength } from "buffer";
 
-const client_id = env.DATUTH_CLIENT_ID;
-const client_secret = env.DAUTH_CLIENT_SECRET;
-const dauth_redirect_url = " http://localhost:5000/api/users/authenticate";
+// const client_id = env.DATUTH_CLIENT_ID;
+// const client_secret = env.DAUTH_CLIENT_SECRET;
+// const dauth_redirect_url = " http://localhost:5000/api/users/authenticate";
 
 interface SignUpBody {
   username?: string;
@@ -66,6 +65,7 @@ export const updateUser: RequestHandler = async (req, res, next) => {
   const userId = req.params.userId;
   const email = req.body.email;
   const isArtist = req.body.isArtist;
+  const showHistory = req.body.showHistory;
   const passwordRaw = req.body.password;
   try {
     if (email) {
@@ -80,7 +80,7 @@ export const updateUser: RequestHandler = async (req, res, next) => {
 
     let defaultImgURL: string = "";
     let imgPublicId: string = "";
-    console.log(req.file);
+    let updatedUser = await UserModel.findById(userId).exec();
     if (req.file) {
       const response = await CloudinaryController.uploadOnCloudinary(
         req.file.path
@@ -90,15 +90,14 @@ export const updateUser: RequestHandler = async (req, res, next) => {
         imgPublicId = response.public_id;
       }
     }
-    let updatedUser = await UserModel.findById(userId).exec();
     if (updatedUser) {
       if (updatedUser.public_id) {
         await CloudinaryController.deleteFromCloudinary(updatedUser.public_id);
       }
+      if (defaultImgURL !== "") updatedUser.profileImgURL = defaultImgURL;
       if (email) updatedUser.email = email;
       if (passwordHashed) updatedUser.password = passwordHashed;
       updatedUser.isArtist = isArtist;
-      if (defaultImgURL !== "") updatedUser.profileImgURL = defaultImgURL;
       updatedUser.public_id = imgPublicId;
       await updatedUser.save();
       return res.status(200).json(updatedUser);

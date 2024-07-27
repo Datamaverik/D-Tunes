@@ -27,6 +27,7 @@ export interface FetchedUser {
   password: string;
   profileImgURL: string;
   public_id: string;
+  trackHistory: [string];
 }
 
 interface ProfileProps {
@@ -406,6 +407,7 @@ const Profile = ({ user }: ProfileProps) => {
         <div className={styles.topTrackSec}>
           <h2>Recent Tracks</h2>
           <TrackHistoryList
+            user={user!}
             togglePlayer={() => {
               setShowPublishPlayer(false);
               setShowSongPlayer(true);

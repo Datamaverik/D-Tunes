@@ -46,6 +46,7 @@ const UserSchema = new Schema({
   },
   trackHistory: { type: [String], default: [] },
   albumHistory: { type: [String], default: [] },
+  showHistory: { type: Boolean, default: false },
 });
 
 type User = InferSchemaType<typeof UserSchema>;

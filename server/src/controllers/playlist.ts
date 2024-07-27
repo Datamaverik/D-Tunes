@@ -106,6 +106,7 @@ export const getUserAllPlaylists = async (
   next: NextFunction
 ) => {
   try {
+    //  should've asked for userId from req parameters instead of getting it from cookies
     const token = req.cookies.token;
     if (!token) throw createHttpError(401, "Unatuthorized: No token provided");
     const decoded = jwt.verify(token, env.JWT_SECRET!) as {

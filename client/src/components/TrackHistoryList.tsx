@@ -3,7 +3,7 @@ import PlaylistView from "../components/PlaylistView";
 import * as UserApi from "../network/api";
 import { useEffect, useState } from "react";
 import SongPlayer from "../components/SongPlayer";
-import { fetchedTrack } from "../pages/Profile";
+import { FetchedUser, fetchedTrack } from "../pages/Profile";
 import * as spotifyApi from "../network/spotify";
 import * as trackApi from "../network/tracks";
 import { isValidMongoObjectID } from "../utils/monogIdvalidator";
@@ -19,23 +19,24 @@ export interface explicitModel {
 }
 
 interface TrackHistoryListProps {
+  user: FetchedUser;
   showSongPlayer: boolean;
   onArtistUpdate: (artistDist: artistDistModel[]) => void;
   onExplicitUpdate: (explicitData: explicitModel[]) => void;
-  togglePlayer:()=>void;
+  togglePlayer: () => void;
 }
 
 const TrackHistoryList = ({
+  user,
   showSongPlayer,
   onArtistUpdate,
   onExplicitUpdate,
-  togglePlayer
+  togglePlayer,
 }: TrackHistoryListProps) => {
   //   const tracks: Track[] = track;
   const [tracks, setTracks] = useState<fetchedTrack[]>([]);
   const [trackId, setTrackId] = useState<string | null>(null);
   const [likedSongs, setLikedSongs] = useState<string[]>([]);
-
   async function getLikedSongs() {
     try {
       const response = await UserApi.getLikedSongs();
@@ -47,8 +48,8 @@ const TrackHistoryList = ({
 
   async function getTrackHistory() {
     try {
-      const user = await UserApi.getLoggedInUser();
-      const trackIdArr = user.user.trackHistory;
+      // const user = await UserApi.getLoggedInUser();
+      const trackIdArr = user.trackHistory;
       const songPromises = trackIdArr.map((song: string) => {
         if (isValidMongoObjectID(song)) return trackApi.getTrackByID(song);
         else return spotifyApi.getTrack(song);
@@ -107,7 +108,7 @@ const TrackHistoryList = ({
     getLikedSongs();
     getTrackHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
   return (
     <div className={styles.trackCont}>
       <div style={{ marginBottom: "-10px" }} className={styles.playlistView}>

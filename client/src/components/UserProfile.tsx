@@ -12,6 +12,11 @@ import { useLocation } from "react-router-dom";
 import UsersFriendList from "./UsersFriendList";
 import { fetchedPlaylistModel } from "./Sidebar";
 import UserPlaylists from "./UserPlaylists";
+import TrackHistoryList, {
+  artistDistModel,
+  explicitModel,
+} from "./TrackHistoryList";
+import Statistics from "./Statistics";
 
 const UserProfile = () => {
   const { showToast } = useToast();
@@ -30,6 +35,12 @@ const UserProfile = () => {
   const [currentUser, setCurrentUser] = useState<FetchedUser>(
     state.currentUser
   );
+  const [artistDist, setArtistDist] = useState<artistDistModel[] | null>(null);
+  const [explicitDist, setExplicitDist] = useState<explicitModel[] | null>(
+    null
+  );
+  const [showSongPlayer, setShowSongPlayer] = useState<boolean>(false);
+  const [showPublishPlayer, setShowPublishPlayer] = useState<boolean>(false);
 
   const getPublishedTracks = async () => {
     try {
@@ -126,13 +137,19 @@ const UserProfile = () => {
       console.error(er);
     }
   };
+  const artistUpdate = (data: artistDistModel[]) => {
+    setArtistDist(data);
+  };
+  const explicitUpdate = (data: explicitModel[]) => {
+    setExplicitDist(data);
+  };
 
   useEffect(() => {
     fetchAllData();
     setShowFriends(false);
     fetchPlaylists();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state]);
+  }, [state, artistDist, explicitDist, user]);
   return (
     <div className={styles.majorCont}>
       <div className={styles.profilePage}>
@@ -192,14 +209,14 @@ const UserProfile = () => {
             </button>
             {showFrinds && (
               <div className={styles.friendRequestSec}>
-                Friends
+                <h3>Friends</h3>
                 <UsersFriendList user={currentUser!} friend={user!} />
               </div>
             )}
           </div>
         </div>
         <div className={styles.publicPlaylists}>
-          Public Playlists
+          <h2>Public Playlists</h2>
           <div style={{ marginBottom: "10px" }}>
             {playlists &&
               playlists.map((playlist) => (
@@ -220,7 +237,7 @@ const UserProfile = () => {
           {user.isArtist && (
             <div>
               <div style={{ position: "relative" }}>
-                Published Tracks
+                <h2>Published Tracks</h2>
                 <div className={styles.playlistView}>
                   {tracks &&
                     tracks.map((track, index) => (
@@ -238,9 +255,34 @@ const UserProfile = () => {
                       />
                     ))}
                 </div>
-                <SongPlayer id={trackId} songs={tracks} />
+                {showPublishPlayer && (
+                  <SongPlayer id={trackId} songs={tracks} />
+                )}
               </div>
             </div>
+          )}
+        </div>
+        <div className={styles.statistics}>
+          {artistDist && explicitDist && (
+            <Statistics
+              artistDistribution={artistDist}
+              explicitDistribution={explicitDist}
+            />
+          )}
+        </div>
+        <div className={styles.topTrackSec}>
+          <h3>{state.user.username}'s Recent Tracks</h3>
+          {user && (
+            <TrackHistoryList
+              user={user}
+              togglePlayer={() => {
+                setShowPublishPlayer(false);
+                setShowSongPlayer(true);
+              }}
+              onArtistUpdate={artistUpdate}
+              onExplicitUpdate={explicitUpdate}
+              showSongPlayer={showSongPlayer}
+            />
           )}
         </div>
       </div>

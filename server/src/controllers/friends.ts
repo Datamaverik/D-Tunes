@@ -1,15 +1,8 @@
 import { RequestHandler } from "express";
 import FriendsModel from "../models/friends";
 import UserModel from "../models/users";
-import mongoose from "mongoose";
 import createHttpError from "http-errors";
-import friends from "../models/friends";
 
-//   0, //  add friend
-//   1, //  requested
-//   2, //  pending
-//   3, //  friends
-//  post req when add friend is pressed
 export const sendFriendReq: RequestHandler = async (req, res, next) => {
   const UserA = req.body.userA;
   const UserB = req.body.userB;
