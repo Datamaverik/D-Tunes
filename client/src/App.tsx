@@ -19,9 +19,8 @@ import ToastList from "./components/ToastList";
 import useToast from "./CustomHooks/Toast.hook";
 import UserList from "./pages/UserList";
 import UserProfile from "./components/UserProfile";
-import { LoadingProvider } from "./Contexts/Loading.context";
+import { LoadingProvider, useLoading } from "./Contexts/Loading.context";
 import LoadingScren from "./pages/LoadingScren";
-import useLoading from "./CustomHooks/Loading.hook";
 
 function App() {
   const { isLoading } = useLoading();
@@ -30,28 +29,25 @@ function App() {
   const [isArtist, setIsArtist] = useState<boolean>(false);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const { toasts, removeToast } = useToast();
-  const { showToast } = useToast();
-  // const [autoCloseDuration, setAutoCloseDuration] = useState(4);
+  // const { showToast } = useToast();
   const navigate = useNavigate();
-
+const fetchLoggedInUser = async () => {
+  try {
+    const response = await getLoggedInUser();
+    if (!response) {
+      return;
+    }
+    setLoggedInUser(response.user.username);
+    setIsArtist(response.user.isArtist);
+    setCurrentUser(response.user);
+    navigate("/");
+  } catch (er) {
+    if (er instanceof Error) {
+      console.log(er.message);
+    }
+  }
+};
   useEffect(() => {
-    const fetchLoggedInUser = async () => {
-      try {
-        const response = await getLoggedInUser();
-        if (!response) {
-          return;
-        }
-        setLoggedInUser(response.user.username);
-        setIsArtist(response.user.isArtist);
-        setCurrentUser(response.user);
-        navigate("/");
-      } catch (er) {
-        if (er instanceof Error) {
-          showToast(er.message, "failure");
-          console.log(er.message);
-        }
-      }
-    };
     fetchLoggedInUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -63,9 +59,9 @@ function App() {
   };
 
   const handleLogin = (username: string) => {
+    fetchLoggedInUser();
     setLoggedInUser(username);
     navigate("/");
-    window.location.reload();
   };
 
   const handleLogout = () => {
@@ -87,8 +83,10 @@ function App() {
 
   return (
     <LoadingProvider>
-      {isLoading && <LoadingScren />}
-      {!isLoading && (
+      (
+      {isLoading ? (
+        <LoadingScren />
+      ) : (
         <>
           <div className={styles.navbarCont}>
             <Navbar
@@ -155,6 +153,7 @@ function App() {
           </Routes>
         </>
       )}
+      )
     </LoadingProvider>
   );
 }

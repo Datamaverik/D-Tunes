@@ -32,14 +32,6 @@ export const getSpotifyToken = async () => {
         },
       }
     );
-    // tokenExpiresAt = Date.now() + response.data.expires_in * 1000;
-
-    // const token = await tokenModel.create({
-    //   access_token: response.data.access_token,
-    //   expires_at: tokenExpiresAt,
-    // });
-
-    // console.log(token);
 
     if (response.status === 200) {
       tokenExpiresAt = Date.now() + response.data.expires_in * 1000;

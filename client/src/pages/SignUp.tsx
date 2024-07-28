@@ -4,7 +4,7 @@ import styles from "../components/styles/form.module.css";
 import * as UserApi from "../network/api";
 import { AxiosError } from "axios";
 import useToast from "../CustomHooks/Toast.hook";
-import useLoading from "../CustomHooks/Loading.hook";
+import { useLoading } from "../Contexts/Loading.context";
 
 interface SignUpPageProps {
   onSuccessfulSignUp: (username: string) => void;

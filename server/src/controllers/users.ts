@@ -8,9 +8,10 @@ import jwt from "jsonwebtoken";
 import env from "../utils/validateEnv";
 import * as CloudinaryController from "../utils/cloudinary";
 import axios from "axios";
+import { error, log } from "console";
 
-// const client_id = env.DATUTH_CLIENT_ID;
-// const client_secret = env.DAUTH_CLIENT_SECRET;
+const client_id = env.DATUTH_CLIENT_ID;
+const client_secret = env.DAUTH_CLIENT_SECRET;
 // const dauth_redirect_url = " http://localhost:5000/api/users/authenticate";
 
 interface SignUpBody {
@@ -249,83 +250,21 @@ export const getUserById: RequestHandler = async (req, res, next) => {
   }
 };
 
-// export const dAuthAuthenticate: RequestHandler = async (req, res, next) => {
-//   const { code, state } = req.query;
-//   console.log(req.query);
-//   try {
-//     if (!state) throw createHttpError(400, "Invalid state");
-
-//     const tokenResponse = await axios.post(
-//       "https://auth.delta.nitt.edu/api/oauth/token",
-//       null,
-//       {
-//         params: {
-//           client_id: client_id,
-//           client_secret: client_secret,
-//           grant_type: "authorization_code",
-//           code,
-//           redirect_uri: "http://localhost:5000/api/users/authenticate",
-//         },
-//         headers: {
-//           "Content-Type": "application/x-www-form-urlencoded",
-//         },
-//       }
-//     );
-
-//     const { access_token } = tokenResponse.data;
-//     console.log(access_token);
-//     const userDataResponse = await axios.post(
-//       "https://auth.delta.nitt.edu/api/resources/user",
-//       null,
-//       {
-//         headers: {
-//           Authorization: `Bearer ${access_token}`,
-//         },
-//       }
-//     );
-
-//     console.log(userDataResponse.data);
-//     const userInfo = userDataResponse.data;
-
-//     const user = await UserModel.findOne({ email: userInfo.email }).exec();
-//     if (!user) {
-//       const newUser = await UserModel.create({
-//         username: userInfo.name,
-//         email: userInfo.email,
-//         password: null,
-//       });
-//       sendCookie(newUser._id, res);
-//       console.log(newUser);
-//       res.status(200).json({ message: "Sign Up successful" });
-//     } else {
-//       console.log(user);
-//       sendCookie(user._id, res);
-//       res.status(200).json({ message: "Login successful", user });
-//     }
-//   } catch (er) {
-//     next(er);
-//   }
-// };
-
 export const dAuthAuthenticate: RequestHandler = async (req, res, next) => {
   const { code, state } = req.query;
-
   try {
     if (!state) throw createHttpError(400, "Invalid state");
-    if (typeof code !== "string") throw createHttpError(400, "Invalid code");
+    if (!code) throw createHttpError(404, "Code not found");
 
-    const queryparams = {
-      client_id: "HKEkBu-lR.2ZoPhz",
-      client_secret: "8F9Z22At5vZac~jadqSutR448EZhYs8r",
-      redirect_uri: "http://localhost:5000/api/users/authenticate",
-      grant_type: "authorization_code",
-      code: code,
-    };
-    const URL = "https://auth.delta.nitt.edu/api/oauth/token";
-
-    const response = await axios.post(
-      URL,
-      new URLSearchParams(queryparams).toString(),
+    const tokenResponse = await axios.post(
+      "https://auth.delta.nitt.edu/api/oauth/token",
+      new URLSearchParams({
+        client_id: client_id,
+        client_secret: client_secret,
+        grant_type: "authorization_code",
+        code: code.toString(),
+        redirect_uri: "http://localhost:5000/api/users/authenticate",
+      }).toString(),
       {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -333,13 +272,11 @@ export const dAuthAuthenticate: RequestHandler = async (req, res, next) => {
       }
     );
 
-    console.log("Access Token Response:", response.data);
+    const { access_token } = tokenResponse.data;
 
-    const { access_token } = response.data;
-
-    const userResources = await axios.post(
+    const userResponse = await axios.post(
       "https://auth.delta.nitt.edu/api/resources/user",
-      {},
+      null,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -347,26 +284,41 @@ export const dAuthAuthenticate: RequestHandler = async (req, res, next) => {
       }
     );
 
-    const userInfo = userResources.data;
-    console.log(userInfo);
+    console.log(userResponse);
+    res.send(userResponse);
+    //     const { access_token } = tokenResponse.data;
+    //     console.log(access_token);
+    //     const userDataResponse = await axios.post(
+    //       "https://auth.delta.nitt.edu/api/resources/user",
+    //       null,
+    //       {
+    //         headers: {
+    //           Authorization: `Bearer ${access_token}`,
+    //         },
+    //       }
+    //     );
 
-    const user = await UserModel.findOne({ email: userInfo.email }).exec();
-    if (!user) {
-      const newUser = await UserModel.create({
-        username: userInfo.name,
-        email: userInfo.email,
-        password: null,
-      });
-      sendCookie(newUser._id, res);
-      console.log(newUser);
-      res.status(200).json({ message: "Sign Up successful" });
-    } else {
-      console.log(user);
-      sendCookie(user._id, res);
-      res.status(200).json({ message: "Login successful", user });
-    }
+    //     console.log(userDataResponse.data);
+    //     const userInfo = userDataResponse.data;
+
+    //     const user = await UserModel.findOne({ email: userInfo.email }).exec();
+    //     if (!user) {
+    //       const newUser = await UserModel.create({
+    //         username: userInfo.name,
+    //         email: userInfo.email,
+    //         password: null,
+    //       });
+    //       sendCookie(newUser._id, res);
+    //       console.log(newUser);
+    //       res.status(200).json({ message: "Sign Up successful" });
+    //     } else {
+    //       console.log(user);
+    //       sendCookie(user._id, res);
+    //       res.status(200).json({ message: "Login successful", user });
+    //     }
   } catch (er) {
-    next(er);
+    console.error(er);
+    res.redirect("http://localhost:5173/api/login");
   }
 };
 

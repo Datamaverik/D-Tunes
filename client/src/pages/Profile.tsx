@@ -53,7 +53,6 @@ const Profile = ({ user }: ProfileProps) => {
     handleSubmit,
     formState: { errors },
   } = useForm<songInput>();
-
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const pfpDialogRef = useRef<HTMLDialogElement | null>(null);
   const pfpSubBtnRef = useRef<HTMLButtonElement | null>(null);

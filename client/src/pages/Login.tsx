@@ -2,9 +2,8 @@ import { useForm, FieldError } from "react-hook-form";
 import TextInputField from "../components/form/TextInputField";
 import styles from "../components/styles/form.module.css";
 import * as UserApi from "../network/api";
-// import { AxiosError } from "axios";
 import useToast from "../CustomHooks/Toast.hook";
-import useLoading from "../CustomHooks/Loading.hook";
+import { useLoading } from "../Contexts/Loading.context";
 
 interface LoginPageProps {
   onSuccessfulLogin: (username: string) => void;
@@ -17,7 +16,7 @@ const Login = ({ onSuccessfulLogin }: LoginPageProps) => {
     formState: { errors },
   } = useForm<UserApi.loginCredentials>();
 
-  const {setLoading} = useLoading();
+  const { setLoading } = useLoading();
   const { showToast } = useToast();
 
   async function onSubmit(credentials: UserApi.loginCredentials) {
@@ -33,8 +32,7 @@ const Login = ({ onSuccessfulLogin }: LoginPageProps) => {
     } catch (er: any) {
       console.log(er);
       showToast(er.message, "warning");
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
   }
@@ -46,11 +44,11 @@ const Login = ({ onSuccessfulLogin }: LoginPageProps) => {
       "redirect_uri",
       "http://localhost:5000/api/users/authenticate"
     );
+    authUrl.searchParams.append("response_type","code");
     authUrl.searchParams.append("grant_type", "authorization_code");
     authUrl.searchParams.append("state", "qm2a@g5!ap&5#b");
-    authUrl.searchParams.append("scope", "email openid profile user");
+    authUrl.searchParams.append("scope", "openid email profile user");
     authUrl.searchParams.append("nonce", "qm2a@g5!ap&5#b");
-    authUrl.searchParams.append("response_type", "code");
 
     console.log(authUrl);
 
@@ -93,7 +91,6 @@ const Login = ({ onSuccessfulLogin }: LoginPageProps) => {
             }}
             error={errors.password as FieldError}
           />
-
           <button type="submit" className={styles.signUpBtn}>
             Log In
           </button>
