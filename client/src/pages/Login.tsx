@@ -39,7 +39,7 @@ const Login = ({ onSuccessfulLogin }: LoginPageProps) => {
 
   function handleDAuth() {
     const authUrl = new URL("https://auth.delta.nitt.edu/authorize");
-    authUrl.searchParams.append("client_id", "HKEkBu-lR.2ZoPhz");
+    authUrl.searchParams.append("client_id", "_q5kEB~N~e5GniDt");
     authUrl.searchParams.append(
       "redirect_uri",
       "http://localhost:5000/api/users/authenticate"
