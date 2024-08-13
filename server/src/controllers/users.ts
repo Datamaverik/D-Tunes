@@ -8,7 +8,6 @@ import jwt from "jsonwebtoken";
 import env from "../utils/validateEnv";
 import * as CloudinaryController from "../utils/cloudinary";
 import axios from "axios";
-import { error, log } from "console";
 
 const client_id = env.DATUTH_CLIENT_ID;
 const client_secret = env.DAUTH_CLIENT_SECRET;
@@ -273,6 +272,8 @@ export const dAuthAuthenticate: RequestHandler = async (req, res, next) => {
     );
 
     const { access_token } = tokenResponse.data;
+    console.log(access_token);
+    
 
     const userResponse = await axios.post(
       "https://auth.delta.nitt.edu/api/resources/user",

@@ -1,16 +1,32 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const NotFoundPg = () => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setTimeout(() => {
-      navigate("/");
-    }, 3000);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  return <div>NotFoundPg</div>;
+  const handleClick = () => {
+    navigate("/");
+    window.location.reload();
+  };
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <img
+        src="../../public/404Page.jpg"
+        alt="404 not found"
+        style={{
+          width: "45%",
+          height: "auto",
+        }}
+      ></img>
+      <button onClick={handleClick}>Home</button>
+    </div>
+  );
 };
 
 export default NotFoundPg;

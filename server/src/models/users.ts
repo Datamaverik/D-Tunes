@@ -1,5 +1,4 @@
 import { InferSchemaType, Schema, model } from "mongoose";
-import FriendModel from "./friends";
 
 const UserSchema = new Schema({
   username: {

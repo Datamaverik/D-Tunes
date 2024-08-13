@@ -11,11 +11,11 @@ DTunes is a music streaming platform created to provide a seamless, ad-free musi
   <img src="Readme-assets/Toast-success.png" alt="Login page image" width="200px">
 <img src="Readme-assets/Toast-warning.png" alt="Login page image" width="200px">
 
-- **Liked songs automatically available as a private playlist.**
-- **Search and stream music from various sources.**<img src="Readme-assets/Home-Search.png" alt="Home page image">
 - **Create and manage playlists with optional thumbnails.**
 - **Create Public playlists visible to all user base.**
 - **Sequential playback of playlist songs.**
+- **Liked songs automatically available as a private playlist.**
+- **Search and stream music from various sources.**<img src="Readme-assets/Home-Search.png" alt="Home page image">
 - **Upgrade to Artist accounts who can upload new music.**
 - **Private playlists with total duration info.**
 - **Friend requests and user search with a toggle.**
@@ -30,12 +30,12 @@ DTunes is a music streaming platform created to provide a seamless, ad-free musi
 - **Frontend**: <img src="Readme-assets/react.png" alt="React Logo" width="30" height="30"> React,
   <img src="Readme-assets/Typescript.png" alt="Ts Logo" width="30" height="30"> TypeScript,
   <img src="Readme-assets/chartjs-logo.svg" alt="ChartJS Logo" width="30" height="30"> chartJS
-- **Backend**: <img src="Readme-assets/node.png" alt="NodeJS Logo" width="30" height="30"> Node.js, <img src="Readme-assets/express.svg" alt="Express Logo" width="30" height="30"> Express, <img src="Readme-assets/Typescript.png" alt="Ts Logo" width="30" height="30"> Typescript
+- **Backend**: <img src="Readme-assets/nodeJS.svg" alt="NodeJS Logo" width="30" height="30"> Node.js, <img style="" src="Readme-assets/express.svg" alt="Express Logo" width="30" height="30"> Express, <img src="Readme-assets/Typescript.png" alt="Ts Logo" width="30" height="30"> Typescript
 - **Database**:<img src="Readme-assets/mongo.png" alt="MongoDB Logo" width="30" height="30"> MongoDB
 - **Authentication**: <img src="Readme-assets/jwt.png" alt="JWT Logo" width="30" height="30"> JWT
 - **APIs**:
-  - <img src="Readme-assets/spotify.svg" alt="Spotify Logo" width="30" height="30"> Spotify API for music
-  - <img src="Readme-assets/icons8-genius.svg" alt="Genius Logo" width="30" height="30"> Genius API for lyrics
+  - <img src="Readme-assets/Spotify_logo.png" alt="Spotify Logo" width="30" height="30"> Spotify API for music
+  - <img src="Readme-assets/genius_log.png" alt="Genius Logo" width="30" height="30"> Genius API for lyrics
 - **Image and File Storage**: <img src="Readme-assets/cloudinary-2.svg" alt="Cloudinary Logo" width="30" height="30"> Cloudinary
 
 ## Setup
